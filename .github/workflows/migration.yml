@@ -8,7 +8,7 @@ on:
 env:
   # Setting an environment variable with the value of a configuration variable
   AWS_REGION : 'us-west-2'
-  environment_name: ''
+  environment_name: 'qa'
   deploy_dev_qa: 'true'
   deploy_pt: 'false'
   deploy_stg: 'false'
@@ -38,7 +38,7 @@ jobs:
         working-directory: ems-v3-v4-migration/
         run: | 
           chmod +x build_deploy.sh
-          bash build_deploy.sh ${environment_name}
+          bash build_deploy.sh ${{env.environment_name}}
 
   # deploy_dev_qa:
   #   runs-on: ubuntu-latest
