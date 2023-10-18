@@ -1,13 +1,13 @@
 
 name: Test AWS account connection 
 
-# on:
-#   push:
-#     branches: [ main ]
+on:
+  push:
+    branches: [ main ]
 
 env:
   AWS_REGION : "us-east-1"
-
+  environment_name: 'qa'
 
 # Permission can be added at job level or workflow level    
 permissions:
@@ -26,7 +26,27 @@ jobs:
           role-to-assume: arn:aws:iam::455800277932:role/GithubActionsS3Access #change to reflect your IAM role’s ARN
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ env.AWS_REGION }}
-      # Hello from AWS: WhoAmI
-      - name: Sts GetCallerIdentity
-        run: |
-          aws s3 ls
+
+      - name: Check Environment Input
+        id: env_input
+        run: echo ::set-output name=environment::${{ github.event.inputs.environment }}
+        continue-on-error: true  
+
+  deploy_qa:
+    runs-on: ubuntu-latest
+    if: ${{ steps.env_input.outputs.environment == 'qa' }}
+    steps:
+      - name: Deploy to qa
+        working-directory: ems-v3-v4-migration/
+        run: | 
+          chmod +x build_deploy.sh
+          bash build_deploy.sh ${{env.environment_name}}
+  deploy_prod:
+    runs-on: ubuntu-latest
+    if: ${{ steps.env_input.outputs.environment == 'prod' }}
+    steps:
+      - name: Deploy to prod
+        working-directory: ems-v3-v4-migration/
+        run: | 
+          chmod +x build_deploy.sh
+          bash build_deploy.sh ${{env.environment_name}}
