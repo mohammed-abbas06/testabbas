@@ -1,14 +1,15 @@
 name: Migrate Jenkins Pipeline to Github Actions
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      environment_name:
+        description: 'enter the environment'
+        required: true
 
 env:
   # Setting an environment variable with the value of a configuration variable
   AWS_REGION : 'us-west-2'
-  environment_name: 'qa'
   deploy_dev_qa: 'true'
   deploy_pt: 'false'
   deploy_stg: 'false'
@@ -34,39 +35,24 @@ jobs:
           role-session-name : GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ env.AWS_REGION }}
           
-      - name: 
+      - name: 'deploy_api'
         working-directory: ems-v3-v4-migration/
         run: | 
           chmod +x build_deploy.sh
           bash build_deploy.sh ${{env.environment_name}}
 
-  # deploy_dev_qa:
-  #   runs-on: ubuntu-latest
-  #   # if: env.deploy_dev_qa == 'true'
-  #   steps:
-  #     - name: Deploy to Dev and QA
-  #       working-directory: emsv3-v4-migration/
-  #       run: |
-  #         echo "environment_name=qa" >> $GITHUB_ENV
-  #         bash build_and_deploy.sh ${environment_name}
+      - name: 'deploy_api_to_qa'
+        if: ${{ github.event.inputs.environment_name }} == 'qa'
+        working-directory: emsv3-v4-migration/
+        run: |
+          chmod +x build_deploy.sh
+          bash build_deploy.sh ${{ github.event.inputs.environment_name }}
 
-  # deploy_pt:
-  #   runs-on: ubuntu-latest
-  #   # if: env.deploy_pt == 'true'
-  #   steps:
-  #     - name: Deploy to pt
-  #       working-directory: emsv3-v4-migration/
-  #       run: |
-  #         echo "environment_name=pt" >> $GITHUB_ENV
-  #         bash build_and_deploy.sh ${environment_name}
+      - name: 'deploy_api_to_pt'
+        if: ${{ github.event.inputs.environment_name }} == 'pt'
+        working-directory: emsv3-v4-migration/
+        run: |
+          chmod +x build_deploy.sh
+          bash build_deploy.sh ${{ github.event.inputs.environment_name }}
 
-  # deploy_stage:
-  #   runs-on: ubuntu-latest
-  #   # if: env.deploy_stg == 'true'
-  #   steps:
-  #     - name: Deploy to stage
-  #       working-directory: emsv3-v4-migration/
-  #       run: |
-  #         echo "environment_name=stage" >> $GITHUB_ENV
-  #         bash build_and_deploy.sh ${environment_name}
         
