@@ -58,12 +58,12 @@ jobs:
       
       - name: commitdate
         run: |
-          echo git log -1 --format=\'%at\' +%Y:%m:%d-%H:%M:%S
+          echo ${git log -1 --format=\'%at\' +%Y:%m:%d-%H:%M:%S)
       
       - name: deploymentdate
         run: |
-          echo date +"%Y:%m:%d-%H:%M:%S"
+          echo $(date +"%Y:%m:%d-%H:%M:%S")
       
       - name: commitowner
         run: |
-          echo git --no-pager show -s --format=\'%ae\'
+          echo $(git --no-pager show -s --format=\'%ae\')
