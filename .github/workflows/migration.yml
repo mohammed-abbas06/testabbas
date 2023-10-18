@@ -42,15 +42,15 @@ jobs:
           bash build_deploy.sh ${{ github.event.inputs.environment_name }}
 
       - name: 'deploy_api_to_qa'
-        if: ${{ github.event.inputs.environment_name }} == 'qa'
-        working-directory: emsv3-v4-migration/
+        if: ${{ github.event.inputs.environment_name == 'qa'}}
+        working-directory: ems-v3-v4-migration/
         run: |
           chmod +x build_deploy.sh
           bash build_deploy.sh ${{ github.event.inputs.environment_name }}
 
       - name: 'deploy_api_to_pt'
-        if: ${{ github.event.inputs.environment_name }} == 'pt'
-        working-directory: emsv3-v4-migration/
+        if: ${{ github.event.inputs.environment_name == 'pt'}}
+        working-directory: ems-v3-v4-migration/
         run: |
           chmod +x build_deploy.sh
           bash build_deploy.sh ${{ github.event.inputs.environment_name }}
