@@ -39,7 +39,7 @@ jobs:
         working-directory: ems-v3-v4-migration/
         run: | 
           chmod +x build_deploy.sh
-          bash build_deploy.sh ${{env.environment_name}}
+          bash build_deploy.sh ${{ github.event.inputs.environment_name }}
 
       - name: 'deploy_api_to_qa'
         if: ${{ github.event.inputs.environment_name }} == 'qa'
