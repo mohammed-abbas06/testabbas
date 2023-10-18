@@ -41,36 +41,29 @@ jobs:
     runs-on: ubuntu-latest
     if: env.deploy_dev_qa == 'true'
     steps:
-    - name: Set environment_name variable
-      run: echo "environment_name=qa" >> $GITHUB_ENV
-
-    steps:
       - name: Deploy to Dev and QA
         working-directory: emsv3-v4-migration/
         run: |
+          echo "environment_name=qa" >> $GITHUB_ENV
           bash build_and_deploy.sh ${environment_name}
 
   deploy_pt:
     runs-on: ubuntu-latest
     if: env.deploy_pt == 'true'
     steps:
-      - name: Set environment_name variable
-        run: echo "environment_name=pt" >> $GITHUB_ENV
-    steps:
       - name: Deploy to pt
         working-directory: emsv3-v4-migration/
         run: |
+          echo "environment_name=pt" >> $GITHUB_ENV
           bash build_and_deploy.sh ${environment_name}
 
   deploy_stage:
     runs-on: ubuntu-latest
     if: env.deploy_stg == 'true'
     steps:
-      - name: Set environment_name variable
-        run: echo "environment_name=stage" >> $GITHUB_ENV
-    steps:
       - name: Deploy to stage
         working-directory: emsv3-v4-migration/
         run: |
+          echo "environment_name=stage" >> $GITHUB_ENV
           bash build_and_deploy.sh ${environment_name}
         
