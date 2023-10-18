@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 
-        working-directory: ./ems-v3-v4-migration/
+        working-directory: /ems-v3-v4-migration/
         run: | 
           chmod +x build_deploy.sh
           bash build_deploy.sh ${environment_name}
