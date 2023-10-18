@@ -9,6 +9,7 @@ env:
   # Setting an environment variable with the value of a configuration variable
   AWS_REGION : 'us-east-1'
   environment_name: ''
+  deploy_dev_qa: 'qa'
 
 # Permission can be added at job level or workflow level    
 permissions:
