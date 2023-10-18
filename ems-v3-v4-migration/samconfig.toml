@@ -1,0 +1,11 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "sam-test-app"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1hjpba01ui9ec"
+s3_prefix = "sam-test-app"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "Environment=\"dev\""
