@@ -1,0 +1,76 @@
+name: Migrate Jenkins Pipeline to Github Actions
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  # Setting an environment variable with the value of a configuration variable
+  AWS_REGION : 'us-east-1'
+  environment_name: ''
+
+# Permission can be added at job level or workflow level    
+permissions:
+  id-token: write   # This is required for requesting the JWT
+  contents: read    # This is required for actions/checkout
+
+jobs:
+  build_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Git clone the repository
+        uses: actions/checkout@v3
+
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v1.7.0
+        with:
+          role-to-assume : arn:aws:iam::455800277932:role/GithubActionsS3Access #change to reflect your IAM role’s ARN
+          role-session-name : GitHub_to_AWS_via_FederatedOIDC
+
+  deploy_api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 
+        working-directory: emsv3-v4-migration/
+        run: | 
+          bash build_and_deploy.sh ${environment_name}
+
+  deploy_dev_qa:
+    runs-on: ubuntu-latest
+    if: env.deploy_dev_qa == 'true'
+      steps:
+      - name: Set environment_name variable
+        run: echo "environment_name=qa" >> $GITHUB_ENV
+
+    steps:
+      - name: Deploy to Dev and QA
+        working-directory: emsv3-v4-migration/
+        run: |
+          bash build_and_deploy.sh ${environment_name}
+
+  deploy_pt:
+    runs-on: ubuntu-latest
+    if: env.deploy_pt == 'true'
+    steps:
+      - name: Set environment_name variable
+        run: echo "environment_name=pt" >> $GITHUB_ENV
+    steps:
+      - name: Deploy to pt
+        working-directory: emsv3-v4-migration/
+        run: |
+          bash build_and_deploy.sh ${environment_name}
+
+  deploy_stage:
+    runs-on: ubuntu-latest
+    if: env.deploy_stg == 'true'
+    steps:
+      - name: Set environment_name variable
+        run: echo "environment_name=stage" >> $GITHUB_ENV
+    steps:
+      - name: Deploy to stage
+        working-directory: emsv3-v4-migration/
+        run: |
+          bash build_and_deploy.sh ${environment_name}
+        

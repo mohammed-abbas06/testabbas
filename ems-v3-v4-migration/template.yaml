@@ -1,0 +1,17 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: SAM Template for creating an S3 bucket
+Transform: 'AWS::Serverless-2016-10-31'
+
+Parameters:
+  Environment:
+    Type: String
+    Description: Environment tag for the S3 bucket (e.g., dev, prod)
+
+Resources:
+  MyS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: abbas-s3-bucket-ems-testing
+      Tags:
+        - Key: environment
+          Value: !Ref Environment
