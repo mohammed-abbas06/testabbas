@@ -54,5 +54,3 @@ jobs:
         run: |
           chmod +x build_deploy.sh
           bash build_deploy.sh ${{ github.event.inputs.environment_name }}
-
-        
