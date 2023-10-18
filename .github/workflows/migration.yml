@@ -10,9 +10,6 @@ on:
 env:
   # Setting an environment variable with the value of a configuration variable
   AWS_REGION : 'us-west-2'
-  deploy_dev_qa: 'true'
-  deploy_pt: 'false'
-  deploy_stg: 'false'
   
 
 # Permission can be added at job level or workflow level    
@@ -54,5 +51,21 @@ jobs:
         run: |
           chmod +x build_deploy.sh
           bash build_deploy.sh ${{ github.event.inputs.environment_name }}
+
+      - name: Access Commit ID
+        run: |
+          echo "The commit ID for this workflow run is: ${{ github.sha }}"
+      
+      - name: commitdate
+        run: |
+          bash date -d @$(git log -n1 --format=\'%at\') +%Y:%m:%d-%H:%M:%S', returnStdout: true).trim()
+      
+      - name: deploymentdate
+        run: |
+          bash 'date +"%Y:%m:%d-%H:%M:%S"', returnStdout: true).trim()
+      
+      - name: commitowner
+        run: |
+          bash 'git --no-pager show -s --format=\'%ae\'', returnStdout: true).trim()
 
         
