@@ -58,7 +58,7 @@ jobs:
       
       - name: commitdate
         run: |
-          bash date -d @$(git log -n1 --format=\'%at\') +%Y:%m:%d-%H:%M:%S', returnStdout: true).trim()
+          bash 'date -d @$(git log -n1 --format=\'%at\') +%Y:%m:%d-%H:%M:%S', returnStdout: true).trim()
       
       - name: deploymentdate
         run: |
