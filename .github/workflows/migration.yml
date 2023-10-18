@@ -40,9 +40,9 @@ jobs:
   deploy_dev_qa:
     runs-on: ubuntu-latest
     if: env.deploy_dev_qa == 'true'
-      steps:
-      - name: Set environment_name variable
-        run: echo "environment_name=qa" >> $GITHUB_ENV
+    steps:
+    - name: Set environment_name variable
+      run: echo "environment_name=qa" >> $GITHUB_ENV
 
     steps:
       - name: Deploy to Dev and QA

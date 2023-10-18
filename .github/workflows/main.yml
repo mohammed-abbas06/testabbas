@@ -1,9 +1,9 @@
 
 name: Test AWS account connection 
 
-on:
-  push:
-    branches: [ main ]
+# on:
+#   push:
+#     branches: [ main ]
 
 env:
   AWS_REGION : "us-east-1"
