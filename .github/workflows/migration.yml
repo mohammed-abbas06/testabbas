@@ -40,7 +40,7 @@ jobs:
       - name: 
         working-directory: /emsv3-v4-migration/
         run: | 
-          bash build_and_deploy.sh ${environment_name}
+          bash build_deploy.sh ${environment_name}
 
   # deploy_dev_qa:
   #   runs-on: ubuntu-latest
