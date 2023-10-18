@@ -38,37 +38,37 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 
-        working-directory: emsv3-v4-migration/
+        working-directory: ./emsv3-v4-migration/
         run: | 
           bash build_and_deploy.sh ${environment_name}
 
-  deploy_dev_qa:
-    runs-on: ubuntu-latest
-    # if: env.deploy_dev_qa == 'true'
-    steps:
-      - name: Deploy to Dev and QA
-        working-directory: emsv3-v4-migration/
-        run: |
-          echo "environment_name=qa" >> $GITHUB_ENV
-          bash build_and_deploy.sh ${environment_name}
+  # deploy_dev_qa:
+  #   runs-on: ubuntu-latest
+  #   # if: env.deploy_dev_qa == 'true'
+  #   steps:
+  #     - name: Deploy to Dev and QA
+  #       working-directory: emsv3-v4-migration/
+  #       run: |
+  #         echo "environment_name=qa" >> $GITHUB_ENV
+  #         bash build_and_deploy.sh ${environment_name}
 
-  deploy_pt:
-    runs-on: ubuntu-latest
-    # if: env.deploy_pt == 'true'
-    steps:
-      - name: Deploy to pt
-        working-directory: emsv3-v4-migration/
-        run: |
-          echo "environment_name=pt" >> $GITHUB_ENV
-          bash build_and_deploy.sh ${environment_name}
+  # deploy_pt:
+  #   runs-on: ubuntu-latest
+  #   # if: env.deploy_pt == 'true'
+  #   steps:
+  #     - name: Deploy to pt
+  #       working-directory: emsv3-v4-migration/
+  #       run: |
+  #         echo "environment_name=pt" >> $GITHUB_ENV
+  #         bash build_and_deploy.sh ${environment_name}
 
-  deploy_stage:
-    runs-on: ubuntu-latest
-    # if: env.deploy_stg == 'true'
-    steps:
-      - name: Deploy to stage
-        working-directory: emsv3-v4-migration/
-        run: |
-          echo "environment_name=stage" >> $GITHUB_ENV
-          bash build_and_deploy.sh ${environment_name}
+  # deploy_stage:
+  #   runs-on: ubuntu-latest
+  #   # if: env.deploy_stg == 'true'
+  #   steps:
+  #     - name: Deploy to stage
+  #       working-directory: emsv3-v4-migration/
+  #       run: |
+  #         echo "environment_name=stage" >> $GITHUB_ENV
+  #         bash build_and_deploy.sh ${environment_name}
         
