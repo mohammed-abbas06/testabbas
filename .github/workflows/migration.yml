@@ -43,7 +43,7 @@ jobs:
 
   deploy_dev_qa:
     runs-on: ubuntu-latest
-    if: env.deploy_dev_qa == 'true'
+    # if: env.deploy_dev_qa == 'true'
     steps:
       - name: Deploy to Dev and QA
         working-directory: emsv3-v4-migration/
@@ -53,7 +53,7 @@ jobs:
 
   deploy_pt:
     runs-on: ubuntu-latest
-    if: env.deploy_pt == 'true'
+    # if: env.deploy_pt == 'true'
     steps:
       - name: Deploy to pt
         working-directory: emsv3-v4-migration/
@@ -63,7 +63,7 @@ jobs:
 
   deploy_stage:
     runs-on: ubuntu-latest
-    if: env.deploy_stg == 'true'
+    # if: env.deploy_stg == 'true'
     steps:
       - name: Deploy to stage
         working-directory: emsv3-v4-migration/
