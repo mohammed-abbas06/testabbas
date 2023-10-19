@@ -11,7 +11,7 @@ Resources:
   MyS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: abbas-s3-bucket-ems-test
+      BucketName: abbas-test-bucket-ems
       Tags:
         - Key: environment
           Value: !Ref Environment
