@@ -21,7 +21,7 @@ case "$env" in
 esac
 
 # Run the SAM deploy command with the specified environment
-sam deploy --no-fail-on-empty-changeset --capabilities CAPABILITY_AUTO_EXPAND --template-file template.yaml --stack-name my-stack-name-$env --parameter-overrides Environment=$env --s3-bucket sam-temp-test-ems --capabilities CAPABILITY_IAM
+sam deploy --no-fail-on-empty-changeset --capabilities CAPABILITY_IAM --template-file template.yaml --stack-name my-stack-name-$env --parameter-overrides Environment=$env --s3-bucket sam-temp-test-ems --capabilities CAPABILITY_IAM
 
 # Check the exit status of the sam deploy command
 if [ $? -eq 0 ]; then
