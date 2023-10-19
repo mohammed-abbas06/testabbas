@@ -58,7 +58,7 @@ jobs:
       
       - name: commitdate
         run: |
-          echo $(git log -1 --format=\'%at\' +%Y:%m:%d-%H:%M:%S)
+          echo $(git log -1 --format=\'%at\' %Y:%m:%d-%H:%M:%S)
       
       - name: deploymentdate
         run: |
