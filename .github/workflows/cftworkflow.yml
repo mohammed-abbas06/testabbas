@@ -1,4 +1,4 @@
-name: Migrate Jenkins Pipeline to Github Actions
+name: Deploy AWS cloudformation
 
 on:
   workflow_dispatch:
