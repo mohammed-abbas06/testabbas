@@ -36,6 +36,6 @@ jobs:
         uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
         with:
           name:  s3-buckets
-          template: template.yaml
+          template: ems-v3-v4-migration/template.yaml
           parameter-overrides: >-
-            BucketName=${{ github.event.inputs.environment_name }}
+            Environment=${{ github.event.inputs.environment_name }}
