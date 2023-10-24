@@ -38,4 +38,4 @@ jobs:
           name:  s3-buckets
           template: ems-v3-v4-migration/template.yaml
           parameter-overrides: >-
-            BucketTag=${{ github.event.inputs.environment_name }}
+            Environment=${{ github.event.inputs.environment_name }}
