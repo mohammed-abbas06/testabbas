@@ -1,0 +1,41 @@
+name: Deploy AWS cloudformation
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment_name:
+        description: 'enter the environment'
+        required: true
+
+env:
+  # Setting an environment variable with the value of a configuration variable
+  AWS_REGION : 'us-west-2'
+  
+
+# Permission can be added at job level or workflow level    
+permissions:
+  id-token: write   # This is required for requesting the JWT
+  contents: read    # This is required for actions/checkout
+
+jobs:
+  build_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Git clone the repository
+        uses: actions/checkout@v3
+
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v1.7.0
+        with:
+          role-to-assume : arn:aws:iam::455800277932:role/GithubActionsS3Access #change to reflect your IAM role’s ARN
+          role-session-name : GitHub_to_AWS_via_FederatedOIDC
+          aws-region: ${{ env.AWS_REGION }}
+          
+      - name: Deploy S3 Buckets CloudFormation Stacks
+        uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
+        with:
+          name:  s3-buckets
+          template: template.yaml
+          parameter-overrides: >-
+            BucketName=${{ github.event.inputs.environment_name }}
