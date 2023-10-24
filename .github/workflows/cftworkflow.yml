@@ -33,10 +33,9 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           
       - name: Deploy S3 Buckets CloudFormation Stacks
-        working-directory: ems-v3-v4-migration/
         uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
         with:
           name:  s3-buckets
-          template: template.yaml
+          template: ems-v3-v4-migration/template.yaml
           parameter-overrides: >-
             BucketTag=${{ github.event.inputs.environment_name }}
