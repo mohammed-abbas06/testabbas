@@ -24,9 +24,9 @@ jobs:
             echo "input_env=${{ github.event.inputs.environment_name }}"
             github_env=${{ github.event.inputs.environment_name }}
           fi
-          echo $gITHUB_env
+          echo $github_env
         env:
-          input_env: $gITHUB_env
+          input_env: $github_env
 
   job2:
     needs: job1
