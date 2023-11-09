@@ -17,7 +17,7 @@ jobs:
       - name: Step 1
         id: step1
         run: |
-          if [ "${{ github.event.inputs.environment_name }}" =~ ^dev[1-9]$ ]; then
+          if echo "${{ github.event.inputs.environment_name }}" | grep -Eq '^dev[1-9]$'; then
             echo "input_env=dev" >> $GITHUB_ENV
           else
             echo "input_env=${{ github.event.inputs.environment_name }}" >> $GITHUB_ENV
