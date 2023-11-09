@@ -24,7 +24,7 @@ jobs:
             echo "input_env=${{ github.event.inputs.environment_name }}"
             github_env=${{ github.event.inputs.environment_name }}
           fi
-          echo "::set-output name=github_env::$github_env"
+          echo "github_env=$github_env" >> $GITHUB_OUTPUT
 
   job2:
     needs: job1
