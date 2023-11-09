@@ -11,7 +11,7 @@ jobs:
   job1:
     runs-on: ubuntu-latest
     outputs:
-      step1-output: ${{ steps.step1.outputs.input_env }}
+      step1-output: ${{ steps.step1.outputs.github_env }}
 
     steps:
       - name: Step 1
@@ -24,9 +24,7 @@ jobs:
             echo "input_env=${{ github.event.inputs.environment_name }}"
             github_env=${{ github.event.inputs.environment_name }}
           fi
-          echo $github_env
-        env:
-          input_env: $github_env
+          echo "::set-output name=github_env::$github_env"
 
   job2:
     needs: job1
