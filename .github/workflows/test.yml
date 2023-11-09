@@ -11,17 +11,19 @@ jobs:
   job1:
     runs-on: ubuntu-latest
     outputs:
-      step1-output: ${{ steps.step1.outputs.output_variable }}
+      step1-output: ${{ steps.step1.outputs.input_env }}
 
     steps:
       - name: Step 1
         id: step1
         run: |
-          # Perform some actions in Job 1
-          echo "output_variable=Hello from Job 1"
-        # Set the output variable for Job 1
+          if [[ "${{ github.event.inputs.environment_name }}" =~ ^dev[1-9]$ ]]; then
+            echo "input_env=dev" >> $GITHUB_ENV
+          else
+            echo "input_env=${{ github.event.inputs.environment_name }}" >> $GITHUB_ENV
+          fi
         env:
-          output_variable: Hello from Job 1
+          input_env: $GITHUB_ENV
 
   job2:
     needs: job1
