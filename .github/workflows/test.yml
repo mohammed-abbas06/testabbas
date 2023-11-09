@@ -22,6 +22,7 @@ jobs:
           else
             echo "input_env=${{ github.event.inputs.environment_name }}" >> $GITHUB_ENV
           fi
+          echo $GITHUB_ENV
         env:
           input_env: $GITHUB_ENV
 
