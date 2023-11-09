@@ -18,13 +18,15 @@ jobs:
         id: step1
         run: |
           if echo "${{ github.event.inputs.environment_name }}" | grep -Eq '^dev[1-9]$'; then
-            echo "input_env=dev" >> $GITHUB_ENV
+            echo "input_env=dev" 
+            github_env="dev"
           else
-            echo "input_env=${{ github.event.inputs.environment_name }}" >> $GITHUB_ENV
+            echo "input_env=${{ github.event.inputs.environment_name }}"
+            github_env=${{ github.event.inputs.environment_name }}
           fi
-          echo $GITHUB_ENV
+          echo $gITHUB_env
         env:
-          input_env: $GITHUB_ENV
+          input_env: $gITHUB_env
 
   job2:
     needs: job1
