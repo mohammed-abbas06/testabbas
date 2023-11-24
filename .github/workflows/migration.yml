@@ -2,10 +2,10 @@ name: Migrate Jenkins Pipeline to Github Actions
 
 on:
   workflow_dispatch:
-    inputs:
-      environment_name:
-        description: 'enter the environment'
-        required: true
+    # inputs:
+    #   environment_name:
+    #     description: 'enter the environment'
+    #     required: true
 
 env:
   # Setting an environment variable with the value of a configuration variable
