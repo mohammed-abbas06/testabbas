@@ -21,49 +21,50 @@ jobs:
   build_deploy:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Git clone the repository
-        uses: actions/checkout@v3
+    # steps:
+    #   - name: Git clone the repository
+    #     uses: actions/checkout@v3
 
-      - name: configure aws credentials
-        uses: aws-actions/configure-aws-credentials@v1.7.0
-        with:
-          role-to-assume : arn:aws:iam::455800277932:role/GithubActionsS3Access #change to reflect your IAM role’s ARN
-          role-session-name : GitHub_to_AWS_via_FederatedOIDC
-          aws-region: ${{ env.AWS_REGION }}
+    #   - name: configure aws credentials
+    #     uses: aws-actions/configure-aws-credentials@v1.7.0
+    #     with:
+    #       role-to-assume : arn:aws:iam::455800277932:role/GithubActionsS3Access #change to reflect your IAM role’s ARN
+    #       role-session-name : GitHub_to_AWS_via_FederatedOIDC
+    #       aws-region: ${{ env.AWS_REGION }}
           
-      - name: 'deploy_api'
-        working-directory: ems-v3-v4-migration/
-        run: | 
-          chmod +x build_deploy.sh
-          bash build_deploy.sh ${{ github.event.inputs.environment_name }}
+    #   - name: 'deploy_api'
+    #     working-directory: ems-v3-v4-migration/
+    #     run: | 
+    #       chmod +x build_deploy.sh
+    #       bash build_deploy.sh ${{ github.event.inputs.environment_name }}
 
-      - name: 'deploy_api_to_qa'
-        if: ${{ github.event.inputs.environment_name == 'qa'}}
-        working-directory: ems-v3-v4-migration/
-        run: |
-          chmod +x build_deploy.sh
-          bash build_deploy.sh ${{ github.event.inputs.environment_name }}
+    #   - name: 'deploy_api_to_qa'
+    #     if: ${{ github.event.inputs.environment_name == 'qa'}}
+    #     working-directory: ems-v3-v4-migration/
+    #     run: |
+    #       chmod +x build_deploy.sh
+    #       bash build_deploy.sh ${{ github.event.inputs.environment_name }}
 
-      - name: 'deploy_api_to_pt'
-        if: ${{ github.event.inputs.environment_name == 'pt'}}
-        working-directory: ems-v3-v4-migration/
-        run: |
-          chmod +x build_deploy.sh
-          bash build_deploy.sh ${{ github.event.inputs.environment_name }}
+    #   - name: 'deploy_api_to_pt'
+    #     if: ${{ github.event.inputs.environment_name == 'pt'}}
+    #     working-directory: ems-v3-v4-migration/
+    #     run: |
+    #       chmod +x build_deploy.sh
+    #       bash build_deploy.sh ${{ github.event.inputs.environment_name }}
 
-      - name: Access Commit ID
-        run: |
-          echo "The commit ID for this workflow run is: ${{ github.sha }}"
+    #   - name: Access Commit ID
+    #     run: |
+    #       echo "The commit ID for this workflow run is: ${{ github.sha }}"
       
-      - name: commitdate
-        run: |
-          echo $(git log -1 --pretty=format:"%ad" --date=short)
+    #   - name: commitdate
+    #     run: |
+    #       echo $(git log -1 --pretty=format:"%ad" --date=short)
       
       - name: deploymentdate
         run: |
-          echo $(date +"%Y:%m:%d-%H:%M:%S")
+          deploymentdate=$(date +"%Y:%m:%d-%H:%M:%S")
+          echo "$deploymentdate" >> "$GITHUB_ENV"
       
-      - name: commitowner
-        run: |
-          echo $(git --no-pager show -s --format=\'%ae\')
+      # - name: commitowner
+      #   run: |
+      #     echo $(git --no-pager show -s --format=\'%ae\')
