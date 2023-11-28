@@ -19,9 +19,12 @@ jobs:
     steps:
     - name: Check if user has permission to deploy
       if: ${{ (github.event.inputs.environment_name == 'stg' || github.event.inputs.environment_name == 'prod') && contains(fromJSON(env.validStgProdDeployUsers), 'github.actor') }}
-      run: exit 1
+      run: |
+        echo "the user does not have permission"
+        exit 1
       
   job1:
+    needs: checks_user_permission
     runs-on: ubuntu-latest
     outputs:
       step1-output: ${{ steps.step1.outputs.github_env }}
