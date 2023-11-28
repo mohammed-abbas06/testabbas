@@ -14,7 +14,7 @@ jobs:
     steps:
     - name: Check if user has permission to deploy
       # if: ${{ (contains(fromJSON('["stg", "prod"]'), github.event.inputs.environment_name)) && (contains(fromJSON('["user1", "user2"]'), github.actor)) }}
-      if: ${{ (github.event.inputs.environment_name == 'stg' || github.event.inputs.environment_name == 'prod') && contains(fromJSON('["user1", "user2"]'), 'github.actor') }}
+      if: ${{ (github.event.inputs.environment_name == 'stg' || github.event.inputs.environment_name == 'prod') && contains(fromJSON('["user1", "user2"]'), github.actor) }}
       run: |
         echo "the user does not have permission"
         exit 1
