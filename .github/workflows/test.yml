@@ -8,7 +8,7 @@ on:
         required: true
 
 env:
-  validStgProdDeployUsers: 'user1,user2,user3' # Define a comma-separated list of valid actors
+  validStgProdDeployUsers: 'user1,user2,user3,mohammed-abbas06' # Define a comma-separated list of valid actors
   
 jobs:
   checks_user_permission:
