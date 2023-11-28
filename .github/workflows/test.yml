@@ -11,11 +11,8 @@ jobs:
   checks_user_permission:
     runs-on: ubuntu-latest
     env:
-      validStgProdDeployUsers: 
-        (
-          "user1"
-          "user2"
-        )
+      validStgProdDeployUsers: ["user1","user2"]
+      
     steps:
     - name: Check if user has permission to deploy
       if: ${{ (github.event.inputs.environment_name == 'stg' || github.event.inputs.environment_name == 'prod') && contains(fromJSON(env.validStgProdDeployUsers), 'github.actor') }}
