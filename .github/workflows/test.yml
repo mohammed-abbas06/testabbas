@@ -13,7 +13,7 @@ jobs:
       
     steps:
     - name: Check if user has permission to deploy
-      if: contains(fromJSON('["stg", "prod"]'), 'github.event.inputs.environment_name')
+      if: contains(fromJSON('["stg", "prod"]'), github.event.inputs.environment_name)
       run: |
         echo "the user does not have permission"
         exit 1
