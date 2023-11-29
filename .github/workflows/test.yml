@@ -11,24 +11,21 @@ env:
   validStgProdDeployUsers: 'user1,user2,user3,mohammed-abbas06' # Define a comma-separated list of valid actors
   
 jobs:
-  checks_user_permission:
-    runs-on: ubuntu-latest
-      
-    steps:
-    - name: Check if the user has permission to deploy
-      if: ${{ (github.event.inputs.environment_name == 'prod' || github.event.inputs.environment_name == 'stage') && !(contains(env.validStgProdDeployUsers, github.actor)) }}
-      run: |
-        echo "the user does not have permission"
-        exit 1
-  
   job1:
-    needs: checks_user_permission
     runs-on: ubuntu-latest
-    outputs:
-      step1-output: ${{ steps.step1.outputs.github_env }}
+    environment: ${{ steps.step1.outputs.github_env }}
+    # outputs:
+    #   step1-output: ${{ steps.step1.outputs.github_env }}
+
 
     steps:
-      - name: Step 1
+      - name: Check if the user has permission to deploy
+        if: ${{ (github.event.inputs.environment_name == 'prod' || github.event.inputs.environment_name == 'stage') && !(contains(env.validStgProdDeployUsers, github.actor)) }}
+        run: |
+          echo "the user does not have permission"
+          exit 1
+          
+      - name: Assign environment
         id: step1
         run: |
           if echo "${{ github.event.inputs.environment_name }}" | grep -Eq '^dev[1-9]$'; then
@@ -40,12 +37,16 @@ jobs:
           fi
           echo "github_env=$github_env" >> $GITHUB_OUTPUT
 
-  job2:
-    needs: job1
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Step 2
+      - name: print env vars
         run: |
-          # Use the output from Job 1 in Job 2
-          echo "Received output: ${{ needs.job1.outputs.step1-output }}"
+          echo ${{vars.AWS_REGION}}
+
+  # job2:
+  #   needs: job1
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Step 2
+  #       run: |
+  #         # Use the output from Job 1 in Job 2
+  #         echo "Received output: ${{ needs.job1.outputs.step1-output }}"
