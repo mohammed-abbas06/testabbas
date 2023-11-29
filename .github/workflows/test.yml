@@ -13,7 +13,7 @@ env:
 jobs:
   job1:
     runs-on: ubuntu-latest
-    environment: ${{ steps.step1.outputs.github_env }}
+    environment: $github_env
     # outputs:
     #   step1-output: ${{ steps.step1.outputs.github_env }}
 
@@ -35,7 +35,7 @@ jobs:
             echo "input_env=${{ github.event.inputs.environment_name }}"
             github_env=${{ github.event.inputs.environment_name }}
           fi
-          echo "github_env=$github_env" >> $GITHUB_OUTPUT
+          echo "github_env=$github_env" >> $GITHUB_ENV
 
       - name: print env vars
         run: |
