@@ -39,6 +39,7 @@ jobs:
   job2:
     needs: job1
     runs-on: ubuntu-latest
+    environment: ${{ needs.job1.outputs.step1-output }}
 
     steps:
       - name: Step 2
