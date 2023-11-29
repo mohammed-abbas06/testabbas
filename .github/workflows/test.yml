@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - name: Check if the user has permission to deploy
-        if: ${{ (github.event.inputs.environment_name == 'prod' || github.event.inputs.environment_name == 'stage') && !(contains(env.validStgProdDeployUsers, github.actor)) }}
+        if: ${{ (github.event.inputs.environment_name == 'prod' || github.event.inputs.environment_name == 'stg') && !(contains(env.validStgProdDeployUsers, github.actor)) }}
         run: |
           echo "the user does not have permission"
           exit 1
