@@ -13,9 +13,8 @@ env:
 jobs:
   job1:
     runs-on: ubuntu-latest
-    environment: $github_env
-    # outputs:
-    #   step1-output: ${{ steps.step1.outputs.github_env }}
+    outputs:
+      step1-output: ${{ steps.step1.outputs.github_env }}
 
 
     steps:
@@ -35,18 +34,15 @@ jobs:
             echo "input_env=${{ github.event.inputs.environment_name }}"
             github_env=${{ github.event.inputs.environment_name }}
           fi
-          echo "github_env=$github_env" >> $GITHUB_ENV
+          echo "github_env=$github_env" >> $GITHUB_OUTPUT
 
-      - name: print env vars
+  job2:
+    needs: job1
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Step 2
         run: |
+          # Use the output from Job 1 in Job 2
+          echo "Received output: ${{ needs.job1.outputs.step1-output }}"
           echo ${{vars.AWS_REGION}}
-
-  # job2:
-  #   needs: job1
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - name: Step 2
-  #       run: |
-  #         # Use the output from Job 1 in Job 2
-  #         echo "Received output: ${{ needs.job1.outputs.step1-output }}"
