@@ -27,14 +27,20 @@ jobs:
       - name: Assign environment
         id: step1
         run: |
-          if echo "${{ github.event.inputs.environment_name }}" | grep -Eq '^dev[1-9]$'; then
-            echo "input_env=dev" 
-            github_env="dev"
+          # if echo "${{ github.event.inputs.environment_name }}" | grep -Eq '^dev[1-9]$'; then
+          #   echo "input_env=dev" 
+          #   github_env="dev"
+          # else
+          #   echo "input_env=${{ github.event.inputs.environment_name }}"
+          #   github_env=${{ github.event.inputs.environment_name }}
+          # fi
+          # echo "github_env=$github_env" >> $GITHUB_OUTPUT
+
+          if [ "${{ github.event.inputs.environment_name }}" = "stg" ] || [ "${{ github.event.inputs.environment_name }}" = "prod" ]; then
+            echo "yes"
           else
-            echo "input_env=${{ github.event.inputs.environment_name }}"
-            github_env=${{ github.event.inputs.environment_name }}
+            echo "no"
           fi
-          echo "github_env=$github_env" >> $GITHUB_OUTPUT
 
   job2:
     needs: job1
