@@ -5,7 +5,8 @@ on:
     inputs:
       environment_name:
         description: 'enter the environment'
-        required: true
+      branch:
+        description: 'enter the branch'
 
 env:
   validStgProdDeployUsers: 'user1,user2,user3,mohammed-abbas06' # Define a comma-separated list of valid actors
@@ -36,7 +37,7 @@ jobs:
           # fi
           # echo "github_env=$github_env" >> $GITHUB_OUTPUT
 
-          if [ "${{ github.event.inputs.environment_name }}" = "stg" ] || [ "${{ github.event.inputs.environment_name }}" = "prod" ]; then
+          if [ -z "${{ github.event.inputs.branch }}" ]; then
             echo "yes"
           else
             echo "no"
