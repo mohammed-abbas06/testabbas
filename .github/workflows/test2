@@ -1,0 +1,88 @@
+name: ems_po_legacy_service
+run-name: ${{ github.actor }} triggered ems po legacy service stack deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment_name:
+        description: 'enter the environment'
+        required: true
+      branch_name:
+        description: 'enter the bitbucket branch name'
+        required: true
+      commit_id:
+        description: 'enter bitbucket commit id'
+      tag_version:
+        description: 'enter the tag version'
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  validStgProdDeployUsers: 'madhessekar,Bharathr1,mohammed-abbas06,Mohamed-Kalandar-Sulaiman-S'
+  
+jobs: 
+  checks_user_permissions_and_assign_env:
+    runs-on: ubuntu-latest
+    outputs:
+      env_value: ${{ steps.set_env.outputs.github_env }}
+      
+    steps:
+    - name: Check if the user has permission to deploy
+      if: ${{ (github.event.inputs.environment_name == 'prod' || github.event.inputs.environment_name == 'stg') && !(contains(env.validStgProdDeployUsers, github.actor)) }}
+      run: |
+        echo "the user does not have permission"
+        exit 1
+
+    - name: Set Environment
+      id: set_env
+      run: |
+        if echo "${{ github.event.inputs.environment_name }}" | grep -Eq '^dev[1-9]$'; then
+          echo "env=dev"
+          github_env="dev"
+        else
+          echo "env=${{ github.event.inputs.environment_name }}"
+          github_env=${{ github.event.inputs.environment_name }}
+        fi
+        echo "github_env=$github_env" >> $GITHUB_OUTPUT
+    
+  sam_deployment:
+    needs: checks_user_permissions_and_assign_env
+    runs-on: ubuntu-latest
+    environment: ${{ needs.checks_user_permissions_and_assign_env.outputs.env_value}}
+
+    steps:
+      - name: Clone Bitbucket repository
+        run: 'git clone -b {{ github.event.inputs.branch_name }} -c "http.extraHeader=Authorization: Bearer BBDC-MzEyOTU4NTE0MDU0Oq55KYl7TZy0v7Ckh9fw8N+7fv/G" https://bitbucket.trimble.tools/scm/eeh/entitlement-services.git .'
+
+      - name: Checkout Bitbucket repository
+        run: |
+          if [ -z "${{ github.event.inputs.commit_id }}" ]; then
+            git checkout ${{ github.event.inputs.branch_name }}
+          else
+            git reset --hard ${{ github.event.inputs.commit_id }}
+            git checkout ${{ github.event.inputs.commit_id }}
+          fi
+
+      - name: SAM Setup 
+        uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
+
+      - name: Run Build and Deploy Shell Script file
+        working-directory: ./entitlement/lambdas/po-legacy-service/
+        run: |
+          commitdate=$(date -d @$(git log -n1 --format='%at') +"%Y:%m:%d-%H:%M:%S" | tr -d '\n')
+          commitId=$(git rev-list --max-count=1 --abbrev-commit --skip=# HEAD | tr -d '\n')
+          commitowner=$(git --no-pager show -s --format='%ae' | tr -d '\n')
+          deploymentdate=$(date +"%Y:%m:%d-%H:%M:%S")
+          echo "commitId=$commitId" >> $GITHUB_ENV
+          echo $commitId
+          echo $commitowner
+
+      - name: Add tag after successful deployment in stage and prod
+        if: ${{ (github.event.inputs.environment_name == 'stg') || (github.event.inputs.environment_name == 'prod') }}
+        run: |
+          git tag "${{ github.event.inputs.environment_name }}_${{ github.event.inputs.tag_version }}" $commitId
+          git push origin "${{ github.event.inputs.environment_name }}_${{ github.event.inputs.tag_version }}" --tags
