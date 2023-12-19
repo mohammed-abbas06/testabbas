@@ -28,7 +28,7 @@ jobs:
 
     steps:
       - name: Clone Bitbucket repository
-        run: 'git clone -b {{ github.event.inputs.branch_name }} -c "http.extraHeader=Authorization: Bearer BBDC-MzEyOTU4NTE0MDU0Oq55KYl7TZy0v7Ckh9fw8N+7fv/G" https://bitbucket.trimble.tools/scm/eeh/entitlement-services.git .'
+        run: 'git clone -b ${{ github.event.inputs.branch_name }} -c "http.extraHeader=Authorization: Bearer BBDC-MzEyOTU4NTE0MDU0Oq55KYl7TZy0v7Ckh9fw8N+7fv/G" https://bitbucket.trimble.tools/scm/eeh/entitlement-services.git .'
 
       - name: Checkout Bitbucket repository
         run: |
