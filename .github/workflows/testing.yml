@@ -22,7 +22,7 @@ permissions:
 env:
   validStgProdDeployUsers: 'madhessekar,Bharathr1,mohammed-abbas06,Mohamed-Kalandar-Sulaiman-S'
 
-    
+jobs: 
   sam_deployment:
     runs-on: ubuntu-latest
 
