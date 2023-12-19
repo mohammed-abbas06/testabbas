@@ -21,36 +21,10 @@ permissions:
 
 env:
   validStgProdDeployUsers: 'madhessekar,Bharathr1,mohammed-abbas06,Mohamed-Kalandar-Sulaiman-S'
-  
-jobs: 
-  checks_user_permissions_and_assign_env:
-    runs-on: ubuntu-latest
-    outputs:
-      env_value: ${{ steps.set_env.outputs.github_env }}
-      
-    steps:
-    - name: Check if the user has permission to deploy
-      if: ${{ (github.event.inputs.environment_name == 'prod' || github.event.inputs.environment_name == 'stg') && !(contains(env.validStgProdDeployUsers, github.actor)) }}
-      run: |
-        echo "the user does not have permission"
-        exit 1
 
-    - name: Set Environment
-      id: set_env
-      run: |
-        if echo "${{ github.event.inputs.environment_name }}" | grep -Eq '^dev[1-9]$'; then
-          echo "env=dev"
-          github_env="dev"
-        else
-          echo "env=${{ github.event.inputs.environment_name }}"
-          github_env=${{ github.event.inputs.environment_name }}
-        fi
-        echo "github_env=$github_env" >> $GITHUB_OUTPUT
     
   sam_deployment:
-    needs: checks_user_permissions_and_assign_env
     runs-on: ubuntu-latest
-    environment: ${{ needs.checks_user_permissions_and_assign_env.outputs.env_value}}
 
     steps:
       - name: Clone Bitbucket repository
@@ -65,10 +39,6 @@ jobs:
             git checkout ${{ github.event.inputs.commit_id }}
           fi
 
-      - name: SAM Setup 
-        uses: aws-actions/setup-sam@v2
-        with:
-          use-installer: true
 
       - name: Run Build and Deploy Shell Script file
         working-directory: ./entitlement/lambdas/po-legacy-service/
@@ -81,8 +51,3 @@ jobs:
           echo $commitId
           echo $commitowner
 
-      - name: Add tag after successful deployment in stage and prod
-        if: ${{ (github.event.inputs.environment_name == 'stg') || (github.event.inputs.environment_name == 'prod') }}
-        run: |
-          git tag "${{ github.event.inputs.environment_name }}_${{ github.event.inputs.tag_version }}" $commitId
-          git push origin "${{ github.event.inputs.environment_name }}_${{ github.event.inputs.tag_version }}" --tags
