@@ -19,7 +19,7 @@ permissions:
   contents: read
 
 env:
-  proddeploy: false  
+  proddeploy: 'test' 
 
 jobs: 
   sam_deployment:
@@ -27,7 +27,7 @@ jobs:
     
     steps:
     - name: Set Environment
-      if: ${{ proddeploy == true }}
+      if: ${{ proddeploy == 'true' }}
       id: set_env
       run: |
         echo $proddeploy
