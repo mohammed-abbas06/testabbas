@@ -19,35 +19,26 @@ permissions:
   id-token: write
   contents: read
 
-env:
-  validStgProdDeployUsers: 'madhessekar,Bharathr1,mohammed-abbas06,Mohamed-Kalandar-Sulaiman-S'
 
 jobs: 
   sam_deployment:
     runs-on: ubuntu-latest
-
+      
     steps:
-      - name: Clone Bitbucket repository
-        run: 'git clone -b ${{ github.event.inputs.branch_name }} -c "http.extraHeader=Authorization: Bearer BBDC-MzEyOTU4NTE0MDU0Oq55KYl7TZy0v7Ckh9fw8N+7fv/G" https://bitbucket.trimble.tools/scm/eeh/entitlement-services.git .'
 
-      - name: Checkout Bitbucket repository
-        run: |
-          if [ -z "${{ github.event.inputs.commit_id }}" ]; then
-            git checkout ${{ github.event.inputs.branch_name }}
-          else
-            git reset --hard ${{ github.event.inputs.commit_id }}
-            git checkout ${{ github.event.inputs.commit_id }}
-          fi
+    - name: Set Environment
+      id: set_env
+      run: |
+        if echo "${{ github.event.inputs.environment_name }}" | grep -Eq '^dev[1-9]$'; then
+          echo "env=dev"
+          github_env="dev"
+        elif echo "${{ github.event.inputs.environment_name }}" | grep -Eq 'sw'; then
+          echo "got it"
+          echo ${{ github.event.inputs.environment_name }}
+        else
+          echo "env=${{ github.event.inputs.environment_name }}"
+          github_env=${{ github.event.inputs.environment_name }}
+        fi
+        echo "github_env=$github_env" >> $GITHUB_OUTPUT
 
-
-      - name: Run Build and Deploy Shell Script file
-        working-directory: ./entitlement/lambdas/po-legacy-service/
-        run: |
-          commitdate=$(date -d @$(git log -n1 --format='%at') +"%Y:%m:%d-%H:%M:%S" | tr -d '\n')
-          commitId=$(git rev-list --max-count=1 --abbrev-commit --skip=# HEAD | tr -d '\n')
-          commitowner=$(git --no-pager show -s --format='%ae' | tr -d '\n')
-          deploymentdate=$(date +"%Y:%m:%d-%H:%M:%S")
-          echo "commitId=$commitId" >> $GITHUB_ENV
-          echo $commitId
-          echo $commitowner
 
