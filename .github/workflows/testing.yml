@@ -23,8 +23,9 @@ env:
 
 jobs: 
   sam_deployment:
+    if: contains(env.proddeploy, 'true')
     runs-on: ubuntu-latest
-    if: ${{ env.proddeploy == 'true' }}
+    
     steps:
     - name: Set Environment
       id: set_env
