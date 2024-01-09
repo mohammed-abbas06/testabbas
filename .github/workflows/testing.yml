@@ -9,7 +9,6 @@ on:
         required: true
       branch_name:
         description: 'enter the bitbucket branch name'
-        required: true
       commit_id:
         description: 'enter bitbucket commit id'
       tag_version:
@@ -18,14 +17,14 @@ on:
 permissions:
   id-token: write
   contents: read
-  
+
+env:
+  proddeploy: false  
+
 jobs: 
   sam_deployment:
+    if: ${{ env.proddeploy == 'true' }}
     runs-on: ubuntu-latest
-    env:
-      prod_deploy: false
-
-    if: ${{ env.prod_deploy == 'true' }}
     steps:
     - name: Set Environment
       id: set_env
