@@ -19,13 +19,12 @@ permissions:
   id-token: write
   contents: read
   
-env:
-  prod_deploy: false
-  validStgProdDeployUsers: 'madhessekar,Bharathr1,mohammed-abbas06,Mohamed-Kalandar-Sulaiman-S' 
-
 jobs: 
   sam_deployment:
     runs-on: ubuntu-latest
+    env:
+      prod_deploy: false
+
     if: ${{ env.prod_deploy == 'true' }}
     steps:
     - name: Set Environment
