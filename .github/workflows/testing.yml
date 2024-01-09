@@ -21,12 +21,12 @@ permissions:
   
 env:
   prod_deploy: false
+  validStgProdDeployUsers: 'madhessekar,Bharathr1,mohammed-abbas06,Mohamed-Kalandar-Sulaiman-S' 
 
 jobs: 
   sam_deployment:
-    if: ${{ env.prod_deploy == 'true' }}
     runs-on: ubuntu-latest
-      
+    if: ${{ env.prod_deploy == 'true' }}
     steps:
     - name: Set Environment
       id: set_env
