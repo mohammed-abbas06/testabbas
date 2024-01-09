@@ -24,7 +24,7 @@ env:
 
 jobs: 
   sam_deployment:
-    if: ${{ env.prod_deploy == 'true' }} 
+    if: (env.prod_deploy == 'true') 
     runs-on: ubuntu-latest
       
     steps:
