@@ -27,7 +27,7 @@ jobs:
     
     steps:
     - name: Set Environment
-      if: ${{ proddeploy == 'true' }}
+      if: ${{ env.proddeploy == 'true' }}
       id: set_env
       run: |
         echo $proddeploy
