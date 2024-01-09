@@ -34,7 +34,8 @@ jobs:
           github_env="dev"
         elif echo "${{ github.event.inputs.environment_name }}" | grep -Eq 'sw'; then
           echo "got it"
-          echo ${{ github.event.inputs.environment_name }}
+          env=${{ github.event.inputs.environment_name }}
+          echo "${env//-sw}"
         else
           echo "env=${{ github.event.inputs.environment_name }}"
           github_env=${{ github.event.inputs.environment_name }}
