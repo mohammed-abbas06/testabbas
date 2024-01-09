@@ -18,12 +18,13 @@ on:
 permissions:
   id-token: write
   contents: read
+  
 env:
   prod_deploy: 'false'
 
 jobs: 
   sam_deployment:
-    if: ${{ (env.prod_deploy == 'true') }} 
+    if: ${{ env.prod_deploy == 'true' }} 
     runs-on: ubuntu-latest
       
     steps:
