@@ -19,15 +19,16 @@ permissions:
   contents: read
 
 env:
-  proddeploy: 'test' 
+  proddeploy: 'false' 
 
 jobs: 
   sam_deployment:
-    if: ${{ env.proddeploy == 'true' }}
     runs-on: ubuntu-latest
     
     steps:
     - name: Set Environment
+
+      if: ${{ env.proddeploy == 'true' }}
       id: set_env
       run: |
         echo $proddeploy
