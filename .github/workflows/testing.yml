@@ -34,8 +34,8 @@ jobs:
         issue-title: "terraform apply"
         issue-body: "Enter yes or no "
         exclude-workflow-initiator-as-approver: false
-        additional-approved-words: ''
-        additional-denied-words: ''
+        
+    - name: Set Environment
       id: set_env
       run: |
         echo $proddeploy
