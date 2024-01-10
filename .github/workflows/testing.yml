@@ -29,7 +29,7 @@ jobs:
     - name: Set Environment
       uses: trstringer/manual-approval@v1
       with:
-        secret: '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'
+        secret: 
         approvers: https://api.github.com/users/:Bharathr1
         minimum-approvals: 1
         issue-title: "terraform apply"
