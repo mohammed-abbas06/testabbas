@@ -25,7 +25,7 @@ jobs:
 
     steps:
       - name: Clone Bitbucket repository
-        run: 'git clone -b ${{ github.event.inputs.branch_name }} -c "http.extraHeader=Authorization: Bearer BBDC-MzEyOTU4NTE0MDU0Oq55KYl7TZy0v7Ckh9fw8N+7fv/G" ssh://git@bitbucket.trimble.tools/tgi/test-trigger-repo.git .'
+        run: 'git clone -b ${{ github.event.inputs.branch_name }} -c "http.extraHeader=Authorization: Bearer BBDC-MjUyMTcwNTgyODg4OmL1vzjRRDHJA4fZCmLIcUoHbHbM" ssh://git@bitbucket.trimble.tools/tgi/test-trigger-repo.git .'
 
 
       - name: Add tag after successful deployment in stage and prod
