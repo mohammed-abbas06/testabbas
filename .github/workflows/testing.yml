@@ -18,39 +18,18 @@ permissions:
   id-token: write
   contents: read
 
-env:
-  proddeploy: 'false' 
 
 jobs: 
   sam_deployment:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Set Environment
-      uses: trstringer/manual-approval@v1
-      with:
-        secret: 
-        approvers: https://api.github.com/users/:Bharathr1
-        minimum-approvals: 1
-        issue-title: "terraform apply"
-        issue-body: "Enter yes or no "
-        exclude-workflow-initiator-as-approver: false
-        
-    - name: Set Environment
-      id: set_env
-      run: |
-        echo $proddeploy
-        if echo "${{ github.event.inputs.environment_name }}" | grep -Eq '^dev[1-9]$'; then
-          echo "env=dev"
-          github_env="dev"
-        elif echo "${{ github.event.inputs.environment_name }}" | grep -Eq 'sw'; then
-          echo "got it"
-          env=${{ github.event.inputs.environment_name }}
-          echo "${env//-sw}"
-        else
-          echo "env=${{ github.event.inputs.environment_name }}"
-          github_env=${{ github.event.inputs.environment_name }}
-        fi
-        echo "github_env=$github_env" >> $GITHUB_OUTPUT
+      - name: Clone Bitbucket repository
+        run: 'git clone -b ${{ github.event.inputs.branch_name }} -c "http.extraHeader=Authorization: Bearer BBDC-MzEyOTU4NTE0MDU0Oq55KYl7TZy0v7Ckh9fw8N+7fv/G" ssh://git@bitbucket.trimble.tools/tgi/test-trigger-repo.git .'
 
 
+      - name: Add tag after successful deployment in stage and prod
+        if: ${{ (github.event.inputs.environment_name == 'stg') || (github.event.inputs.environment_name == 'prod') }}
+        run: |
+          git tag "${{ github.event.inputs.environment_name }}_${{ github.event.inputs.tag_version }}" $commitId
+          git push origin "${{ github.event.inputs.environment_name }}_${{ github.event.inputs.tag_version }}" --tags
