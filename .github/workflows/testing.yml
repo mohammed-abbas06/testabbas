@@ -31,5 +31,5 @@ jobs:
       - name: Add tag after successful deployment in stage and prod
         if: ${{ (github.event.inputs.environment_name == 'stg') || (github.event.inputs.environment_name == 'prod') }}
         run: |
-          git tag "${{ github.event.inputs.environment_name }}_${{ github.event.inputs.tag_version }}" $commitId
+          git tag "${{ github.event.inputs.environment_name }}_${{ github.event.inputs.tag_version }}" 8926c619cd7
           git push origin "${{ github.event.inputs.environment_name }}_${{ github.event.inputs.tag_version }}" --tags
