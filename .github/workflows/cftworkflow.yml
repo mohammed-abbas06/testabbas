@@ -21,21 +21,14 @@ jobs:
   build_deploy:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Git clone the repository
-        uses: actions/checkout@v3
-
-      - name: configure aws credentials
-        uses: aws-actions/configure-aws-credentials@v1.7.0
+      - name: SAM Setup 
+        uses: aws-actions/setup-sam@v2
         with:
-          role-to-assume : arn:aws:iam::455800277932:role/GithubActionsS3Access #change to reflect your IAM role’s ARN
-          role-session-name : GitHub_to_AWS_via_FederatedOIDC
-          aws-region: ${{ env.AWS_REGION }}
-          
-      - name: Deploy S3 Buckets CloudFormation Stacks
-        uses: aws-actions/aws-cloudformation-github-deploy@v1.0.3
-        with:
-          name:  s3-buckets
-          template: ems-v3-v4-migration/template.yaml
-          parameter-overrides: >-
-            Environment=${{ github.event.inputs.environment_name }}
+          use-installer: true
+      
+      - name: test py
+        run: |
+          pip --version
+          pip3 --version
+          python --version
+          python3 --version
