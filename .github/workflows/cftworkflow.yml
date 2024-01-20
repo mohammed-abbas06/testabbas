@@ -20,7 +20,7 @@ permissions:
 jobs:
   build_deploy:
     runs-on: ubuntu-latest
-
+    steps:
       - name: SAM Setup 
         uses: aws-actions/setup-sam@v2
         with:
