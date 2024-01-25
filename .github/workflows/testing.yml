@@ -21,4 +21,4 @@ jobs:
         run: |
           echo $region
           echo $prod_deploy
-          echo ${{ env.GITHUB_REF }}
+          echo $GITHUB_REF_NAME
