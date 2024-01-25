@@ -1,9 +1,9 @@
 name: ems_po_legacy_service
 run-name: ${{ github.actor }} triggered ems po legacy service stack deploy
 
-on:
-  schedule:
-    - cron: '1 * * * *'
+# on:
+#   schedule:
+#     - cron: '1 * * * *'
 
 permissions:
   id-token: write
