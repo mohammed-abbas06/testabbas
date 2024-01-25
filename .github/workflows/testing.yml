@@ -2,34 +2,23 @@ name: ems_po_legacy_service
 run-name: ${{ github.actor }} triggered ems po legacy service stack deploy
 
 on:
-  workflow_dispatch:
-    inputs:
-      environment_name:
-        description: 'enter the environment'
-        required: true
-      branch_name:
-        description: 'enter the bitbucket branch name'
-      commit_id:
-        description: 'enter bitbucket commit id'
-      tag_version:
-        description: 'enter the tag version'
+  schedule:
+  - cron: '15 * * * *'
 
 permissions:
   id-token: write
   contents: read
-
+  
+env:
+  region: 'us-west-2'
+  prod_deploy: 'false'
 
 jobs: 
   sam_deployment:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clone Bitbucket repository
-        run: 'git clone -b ${{ github.event.inputs.branch_name }} -c "http.extraHeader=Authorization: Bearer BBDC-MjUyMTcwNTgyODg4OmL1vzjRRDHJA4fZCmLIcUoHbHbM" https://bitbucket.trimble.tools/scm/tgi/test-trigger-repo.git .'
-
-
-      - name: Add tag after successful deployment in stage and prod
-        if: ${{ (github.event.inputs.environment_name == 'stg') || (github.event.inputs.environment_name == 'prod') }}
+      - name: test
         run: |
-          git tag "${{ github.event.inputs.environment_name }}_${{ github.event.inputs.tag_version }}" 8926c619cd7
-          git push origin "${{ github.event.inputs.environment_name }}_${{ github.event.inputs.tag_version }}" --tags
+          echo $region
+          echo $prod_deploy
