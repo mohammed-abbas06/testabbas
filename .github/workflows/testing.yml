@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} triggered ems po legacy service stack deploy
 
 on:
   schedule:
-  - cron: '15 * * * *'
+  - cron: '1 * * * *'
 
 permissions:
   id-token: write
