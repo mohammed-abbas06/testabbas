@@ -1,9 +1,9 @@
 on:
   workflow_dispatch:
-  inputs:
-    name:
-      description: 'enter the name'
-      required: true
+    inputs:
+      name:
+        description: 'enter the name'
+        required: true
 
 jobs:
   hello_world_job:
