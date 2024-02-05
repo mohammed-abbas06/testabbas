@@ -24,4 +24,5 @@ runs:
             github_env=${{ github.event.inputs.environment_name }}
           fi
           echo "github_env=$github_env" >> $GITHUB_OUTPUT
+      shell: bash
 
