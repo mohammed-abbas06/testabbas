@@ -13,9 +13,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Assign Environment
+        id: set_env
         uses: ./.github/actions/assign_env
         with:
           environment_name: ${{ github.event.inputs.env }}
 
       - name: print env
-        run: echo ${{ steps.set_env.outputs.github_env }}
+        run: echo ${{ steps.set_env.outputs.env_value }}
