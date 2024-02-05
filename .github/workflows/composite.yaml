@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - id: foo
-        uses: actions/testabbas@v1
+        uses: mohammed-abbas06/testabbas@v1
         with:
           who-to-greet: ${{ github.event.inputs.name }}
       - run: echo random-number ${{ steps.foo.outputs.random-number }}
