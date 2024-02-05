@@ -1,7 +1,7 @@
 on:
   workflow_dispatch:
   inputs:
-    environment_name:
+    name:
       description: 'enter the name'
       required: true
 
@@ -14,6 +14,6 @@ jobs:
       - id: foo
         uses: actions/testabbas@v1
         with:
-          who-to-greet: 'Mona the Octocat'
+          who-to-greet: ${{ github.event.inputs.name }}
       - run: echo random-number ${{ steps.foo.outputs.random-number }}
         shell: bash
