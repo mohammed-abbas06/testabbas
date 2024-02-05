@@ -1,8 +1,8 @@
 on:
   workflow_dispatch:
     inputs:
-      name:
-        description: 'enter the name'
+      env:
+        description: 'enter the env_name'
         required: true
 
 jobs:
@@ -10,10 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
-      - uses: actions/checkout@v4
-      - id: foo
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Assign Environment
         uses: ./.github/actions/assign_env
         with:
-          who-to-greet: ${{ github.event.inputs.name }}
-      - run: echo random-number ${{ steps.foo.outputs.random-number }}
-        shell: bash
+          environment_name: ${{ github.event.inputs.env }}
+
+      - name: print env
+        run: echo ${{ steps.set_env.outputs.github_env }}

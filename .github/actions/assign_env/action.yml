@@ -1,23 +1,27 @@
 name: 'Hello World'
 description: 'Greet someone'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  environment_name:  # id of input
+    description: 'enter the env_name'
     required: true
-    default: 'World'
+
+
 outputs:
-  random-number:
+  env_value:
     description: "Random number"
-    value: ${{ steps.random-number-generator.outputs.random-number }}
+    value: ${{ steps.set_env.outputs.github_env }}
 runs:
   using: "composite"
   steps:
-    - run: echo Hello ${{ inputs.who-to-greet }}.
-      shell: bash
-    - id: random-number-generator
-      run: echo "random-number=$(echo $RANDOM)" >> $GITHUB_OUTPUT
-      shell: bash
-    - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
-      shell: bash
-    - run: action.sh
-      shell: bash
+    name: assign env
+    id: set_env
+    run: |
+        if echo "${{ github.event.inputs.environment_name }}" | grep -Eq '^dev[1-9]$'; then
+          echo "env=dev"
+          github_env="dev"
+        else
+          echo "env=${{ github.event.inputs.environment_name }}"
+          github_env=${{ github.event.inputs.environment_name }}
+        fi
+        echo "github_env=$github_env" >> $GITHUB_OUTPUT
+
