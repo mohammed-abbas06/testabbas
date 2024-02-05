@@ -5,6 +5,9 @@ on:
         description: 'enter the env_name'
         required: true
 
+env:
+  validStgProdDeployUsers: 'madhessekar,Bharathr1,mohammed-abbas06,Mohamed-Kalandar-Sulaiman-S'
+
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
@@ -12,6 +15,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Check user permission
+        uses: ./.github/actions/checks_permission
+        with: 
+          github_actor: ${{ github.actor }}
+          environment_name: ${{ github.event.inputs.env }}
+
       - name: Assign Environment
         id: set_env
         uses: ./.github/actions/assign_env
