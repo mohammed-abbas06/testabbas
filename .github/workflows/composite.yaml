@@ -1,4 +1,9 @@
-on: [push]
+on:
+  workflow_dispatch:
+  inputs:
+    environment_name:
+      description: 'enter the name'
+      required: true
 
 jobs:
   hello_world_job:
@@ -7,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - id: foo
-        uses: actions/testabbas
+        uses: actions/testabbas@v1
         with:
           who-to-greet: 'Mona the Octocat'
       - run: echo random-number ${{ steps.foo.outputs.random-number }}
