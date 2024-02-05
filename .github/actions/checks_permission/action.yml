@@ -8,12 +8,12 @@ inputs:
     description: 'enter the env name'
     required: true
 env:
-  validStgProdDeployUsers: 'madhessekar,Bharathr1,Mohamed-Kalandar-Sulaiman-S,mohammed-abbas06'
+  validStgProdDeployUsers: 'madhessekar,Bharathr1,Mohamed-Kalandar-Sulaiman-S'
 runs:
   using: "composite"
   steps:
     - name: Check if the user has permission to deploy
-      if: ${{ (inputs.environment_name == 'prod' || inputs.environment_name == 'stg') && !(contains(env.validStgProdDeployUsers, github_actor)) }}
+      if: ${{ (inputs.environment_name == 'prod' || inputs.environment_name == 'stg') && !(contains(env.validStgProdDeployUsers, inputs.github_actor)) }}
       run: |
         echo "the user does not have permission"
         exit 1
