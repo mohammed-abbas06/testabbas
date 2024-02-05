@@ -8,7 +8,7 @@ inputs:
     description: 'enter the env name'
     required: true
 env:
-  validStgProdDeployUsers: 'madhessekar,Bharathr1,Mohamed-Kalandar-Sulaiman-S'
+  validStgProdDeployUsers: 'madhessekar,Bharathr1,Mohamed-Kalandar-Sulaiman-S,mohammed-abbas06'
 runs:
   using: "composite"
   steps:
