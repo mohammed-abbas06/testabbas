@@ -19,5 +19,5 @@ jobs:
     steps:
       - name: test
         run: |
-          echo ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
+          echo "my branch ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
 
