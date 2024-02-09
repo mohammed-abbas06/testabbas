@@ -7,8 +7,7 @@ inputs:
   environment_name:
     description: 'get the environment name from the workflow'
     required: true
-env:
-  validStgProdDeployUsers: 'ssubram5,Bharathr1,Mohamed-Kalandar-Sulaiman-S,mohammed-abbas06'
+
 runs:
   using: "composite"
   steps:
