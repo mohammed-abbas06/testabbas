@@ -1,8 +1,8 @@
 name: ems_po_legacy_service
 run-name: ${{ github.actor }} triggered ems po legacy service stack deploy
 
-# on:
-#   push
+on:
+  push
 
 permissions:
   id-token: write
@@ -19,6 +19,6 @@ jobs:
     steps:
       - name: test
         run: |
-          commitId=$(git rev-list --max-count=1 --abbrev-commit --skip=# HEAD | tr -d '\n')
-          git tag "test" $commitId
-          git push origin "test" --tags
+          echo $GITHUB_REF_NAME
+          echo ${{GITHUB_REF_NAME}}
+
