@@ -5,8 +5,8 @@ on:
         description: 'enter the env_name'
         required: true
 
-# env:
-#   validStgProdDeployUsers: 'madhessekar,Bharathr1,mohammed-abbas06,Mohamed-Kalandar-Sulaiman-S'
+env:
+  validStgProdDeployUsers: 'madhessekar,Bharathr1,mohammed-abbas06,Mohamed-Kalandar-Sulaiman-S'
 
 jobs:
   hello_world_job:
