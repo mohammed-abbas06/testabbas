@@ -11,7 +11,6 @@ on:
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
-    environment: ${{ steps.set_env.outputs.env_value }}
     name: A job to say hello
     steps:
       - name: Checkout
