@@ -1,23 +1,20 @@
-name: 'Hello World'
-description: 'Greet someone'
+name: 'checks user permission'
+description: 'Checks if the user has permission to deploy to the environment based on the input'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  github_actor:  # id of input
+    description: 'collects the github actor name from the workflow'
     required: true
-    default: 'World'
-outputs:
-  random-number:
-    description: "Random number"
-    value: ${{ steps.random-number-generator.outputs.random-number }}
+  environment_name:
+    description: 'get the environment name from the workflow'
+    required: true
+env:
+  validStgProdDeployUsers: 'ssubram5,Bharathr1,Mohamed-Kalandar-Sulaiman-S,mohammed-abbas06'
 runs:
   using: "composite"
   steps:
-    - run: echo Hello ${{ inputs.who-to-greet }}.
-      shell: bash
-    - id: random-number-generator
-      run: echo "random-number=$(echo $RANDOM)" >> $GITHUB_OUTPUT
-      shell: bash
-    - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
-      shell: bash
-    - run: action.sh
+    - name: Check if the user has permission to deploy
+      if: ${{ (inputs.environment_name == 'prod' || inputs.environment_name == 'stg') && !(contains(env.validStgProdDeployUsers, inputs.github_actor)) }}
+      run: |
+        echo "the user does not have permission"
+        exit 1
       shell: bash
