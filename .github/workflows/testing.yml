@@ -19,6 +19,5 @@ jobs:
     steps:
       - name: test
         run: |
-          echo $GITHUB_REF_NAME
           echo ${{GITHUB_REF_NAME}}
 
