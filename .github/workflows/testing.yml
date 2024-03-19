@@ -20,9 +20,10 @@ jobs:
       - name: Build with Gradle
         if: success() || failure()
         id: build_step
-        run: echo "success"
+        run: exit 1
       
       - name: test
+        if: success() || failure()
         run: |
             if echo "${{ steps.build_step.outcome == 'success' }}" ; then
               echo "build=success"
