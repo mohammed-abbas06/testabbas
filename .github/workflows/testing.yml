@@ -25,7 +25,7 @@ jobs:
       - name: test
         if: success() || failure()
         run: |
-            if echo "${{steps.build_step.outcome }} == success" ; then
+            if echo "${{steps.build_step.outcome }} == 'success'" ; then
               echo "build=success"
               build_status="success"
             else
