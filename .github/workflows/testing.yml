@@ -20,7 +20,7 @@ jobs:
       - name: Build with Gradle    
         if: success() || failure()
         id: build_step
-        run: exit 1
+        run: echo "true"
       
       - name: test
         if: success() || failure()
