@@ -32,4 +32,6 @@ jobs:
               build_status="failed"
             fi
             echo "build_status=$build_status" >> $GITHUB_ENV
+            echo $build_status
+            echo "this is $build_status" 
 
