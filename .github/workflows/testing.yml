@@ -15,9 +15,21 @@ env:
 jobs: 
   sam_deployment:
     runs-on: ubuntu-latest
-
+    
     steps:
+      - name: Build with Gradle
+        if: success() || failure()
+        id: build_step
+        run: echo "success"
+      
       - name: test
         run: |
-          echo "my branch ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
+            if echo "${{ steps.build_step.outcome == 'success' }}" ; then
+              echo "build=success"
+              build_status="success"
+            else
+              echo "build=failed"
+              build_status="failed"
+            fi
+            echo "build_status=$build_status" >> $GITHUB_ENV
 
