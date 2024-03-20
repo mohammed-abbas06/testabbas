@@ -40,13 +40,5 @@ jobs:
             --header 'Content-Type: application/json' \
             --data-raw '{  
                 "text": "Test execution result is: *'"$build_status"'* \n\nTest Report Link: http://d285twt4wwknu8.cloudfront.net/${{github.run_number}}/${{github.run_attempt}}/ems-test-automation-results.html",
-                 "cards": [
-            {
-                "header": {
-                    "title": "Test execution result",
-                    "subtitle": "'"$build_status"'"
-                }
-            }
-            ]
             }'
 
