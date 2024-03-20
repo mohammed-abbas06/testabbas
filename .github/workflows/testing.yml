@@ -26,6 +26,7 @@ jobs:
         if: success() || failure()
         run: |
           pwd
+          ls
           cd ems-v3-v4-migration/
           mkdir nodejs/
           cd nodejs
