@@ -39,7 +39,7 @@ jobs:
             curl --location --request POST 'https://chat.googleapis.com/v1/spaces/AAAA_pSsBgQ/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=9YXYNNZ6P56uIiO4tUnGIs00Yo4Hbb-r-8m1pbZ_j5E' \
             --header 'Content-Type: application/json' \
             --data-raw '{  
-                "text": "Test execution result is: <b>'"$build_status"'</b> \n\nTest Report Link: http://d285twt4wwknu8.cloudfront.net/${{github.run_number}}/${{github.run_attempt}}/ems-test-automation-results.html",
+                "text": "Test execution result is: *'"$build_status"'* \n\nTest Report Link: http://d285twt4wwknu8.cloudfront.net/${{github.run_number}}/${{github.run_attempt}}/ems-test-automation-results.html",
                  "cards": [
             {
                 "header": {
