@@ -38,7 +38,7 @@ jobs:
               cd ../../
               filename=$(basename "$file" .${file##*.})
               zip "$filename.zip" "$file"
-              fi
+            fi
           done
           ls
           cd nodejs/node_modules/
