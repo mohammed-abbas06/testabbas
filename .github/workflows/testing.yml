@@ -24,8 +24,8 @@ jobs:
       
       - name: test
         if: success() || failure()
-        working-directory: ems-v3-v4-migration/
         run: |
+          pwd
           mkdir nodejs/
           cd nodejs
           mkdir node_modules/
