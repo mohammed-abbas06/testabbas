@@ -30,10 +30,8 @@ jobs:
         run: |
           for file in *; do
             if [ -f "$file" ]; then
-              mkdir nodejs
-              cd nodejs/
-              mkdir node_modules
-              cd node_modules/
+              mkdir -p nodejs/node_modules
+              cd nodejs/node_modules
               cp ../../$file .
               cd ../../
               filename=$(basename "$file" .${file##*.})
