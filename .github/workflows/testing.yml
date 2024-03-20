@@ -35,5 +35,5 @@ jobs:
             echo "build_status=$build_status" >> $GITHUB_ENV
             echo $build_status
             echo "this is $build_status" 
-            echo -e "\e[1mThis is bold text\e[0m"
+            echo -e "\e[1m${build_status}\e[0m"
 
