@@ -17,17 +17,20 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Build with Gradle    
-        if: success() || failure()
-        id: build_step
-        run: exit 1
+      # - name: Build with Gradle    
+      #   if: success() || failure()
+      #   id: build_step
+      #   run: exit 1
       
       - name: test
         if: success() || failure()
         working-directory: ./ems-v3-v4-migration/
         run: |
-          mkdir nodejs/node_modules/
-          cp template.yaml nodejs/node_modules/
+          mkdir nodejs/
+          cd nodejs
+          mkdir node_modules/
+          cd node_modules
+          cp ../../template.yaml .
           filename=$(basename "$file" .${file##*.})
           zip "$filename.zip" "$file"
           ls
