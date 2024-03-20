@@ -21,13 +21,15 @@ jobs:
       #   if: success() || failure()
       #   id: build_step
       #   run: exit 1
+      - name: Git clone the repository
+        uses: actions/checkout@v3
       
       - name: test
+        working-directory: ./ems-v3-v4-migration
         if: success() || failure()
         run: |
           pwd
           ls
-          cd ems-v3-v4-migration/
           mkdir nodejs/
           cd nodejs
           mkdir node_modules/
