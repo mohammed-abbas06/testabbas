@@ -23,6 +23,7 @@ jobs:
       #   run: exit 1
       
       - name: test
+        working-directory: ./ems-v3-v4-migration/
         if: success() || failure()
         run: |
           pwd
