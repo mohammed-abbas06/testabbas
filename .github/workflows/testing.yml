@@ -28,15 +28,18 @@ jobs:
         working-directory: ./ems-v3-v4-migration
         if: success() || failure()
         run: |
-          pwd
-          ls
-          mkdir nodejs/
-          cd nodejs
-          mkdir node_modules/
-          cd node_modules
-          cp ../../template.yaml .
-          filename=$(basename "$file" .${file##*.})
-          zip "$filename.zip" "$file"
+          for file in *; do
+            if [ -f "$file" ]; then
+              mkdir nodejs/
+              cd nodejs
+              mkdir node_modules/
+              cd node_modules
+              cp ../../$file .
+              cd ../../
+              filename=$(basename "$file" .${file##*.})
+              zip "$filename.zip" "$file"
+              fi
+          done
           ls
           cd nodejs/node_modules/
           ls
