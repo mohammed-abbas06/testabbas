@@ -1,5 +1,5 @@
 name: Restrict user Access
-run-name: ${{ github.actor }} is triggered ems-v3-v4-migration-terraform-deploy
+run-name: ${{ github.actor }} is triggered Restrict user Access job
 
 on:
   workflow_dispatch:
