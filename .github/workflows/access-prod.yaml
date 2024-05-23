@@ -1,4 +1,4 @@
-name: ems-v3-v4-migration-terraform-deploy
+name: Restrict user Access
 run-name: ${{ github.actor }} is triggered ems-v3-v4-migration-terraform-deploy
 
 on:
