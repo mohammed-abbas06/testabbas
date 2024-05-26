@@ -27,14 +27,3 @@ jobs:
         echo "the user does not have permission"
         exit 1
 
-    - name: Set Environment
-      id: set_env
-      run: |
-        if echo "${{ github.event.inputs.environment_name }}" | grep -Eq '^dev[1-9]$'; then
-          echo "env=dev"
-          github_env="dev"
-        else
-          echo "env=${{ github.event.inputs.environment_name }}"
-          github_env=${{ github.event.inputs.environment_name }}
-        fi
-        echo "github_env=$github_env" >> $GITHUB_OUTPUT
