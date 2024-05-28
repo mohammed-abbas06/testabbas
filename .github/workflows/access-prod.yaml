@@ -17,8 +17,6 @@ permissions:
 jobs: 
   checks_user_permissions_and_assign_env:
     runs-on: ubuntu-latest
-    outputs:
-      env_value: ${{ steps.set_env.outputs.github_env }}
       
     steps:
     - name: Check if the user has permission to deploy
