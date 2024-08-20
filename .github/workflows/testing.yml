@@ -28,7 +28,7 @@ jobs:
       - name: Set Version from Branch Name
         id: set_version
         run: |
-          if echo "${{ github.ref_name }}" | grep -Eq '^release/R[0-9]+\.[0-9]+\.[0-9]+$'; then
+          if echo "${{ github.ref_name }}" | grep -Eiq '^release/R[0-9]+\.[0-9]+\.[0-9]+$'; then
             VERSION=$(echo "${{ github.ref_name }}" | sed -E 's/^release\/R([0-9]+\.[0-9]+\.[0-9]+)$/\1/')
             echo "VERSION=$VERSION" >> $GITHUB_ENV
             echo $VERSION
