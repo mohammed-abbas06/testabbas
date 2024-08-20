@@ -37,20 +37,20 @@ jobs:
             echo $VERSION
           fi
           
-      - name: test
-        working-directory: ./ems-v3-v4-migration
-        if: success() || failure()
-        run: |
-          for file in *; do
-            if [ -f "$file" ]; then
-              mkdir -p nodejs/node_modules
-              cd nodejs/node_modules
-              cp ../../$file .
-              cd ../../
-              filename=$(basename "$file" .${file##*.})
-              zip "$filename.zip" "$file"
-            fi
-          done
-          ls
-          cd nodejs/node_modules/
-          ls
+      # - name: test
+      #   working-directory: ./ems-v3-v4-migration
+      #   if: success() || failure()
+      #   run: |
+      #     for file in *; do
+      #       if [ -f "$file" ]; then
+      #         mkdir -p nodejs/node_modules
+      #         cd nodejs/node_modules
+      #         cp ../../$file .
+      #         cd ../../
+      #         filename=$(basename "$file" .${file##*.})
+      #         zip "$filename.zip" "$file"
+      #       fi
+      #     done
+      #     ls
+      #     cd nodejs/node_modules/
+      #     ls
