@@ -3,28 +3,7 @@ run-name: ${{ github.actor }} has triggered ECS Deployment to ${{ github.event.i
 
 
 on:
-  workflow_dispatch:
-    inputs:
-      environment_name:
-        description: 'enter the environment'
-        type: choice
-        options:
-          - int
-          - qa
-          - stage
-        required: true
-      service_name:
-        type: choice
-        options:
-          - ecom
-          - ecom-atcw
-          - ecom-emsw
-          - ecom-ems-notification
-          - ecom-processor
-          - ecom-plan
-        description: 'enter the service name'
-        required: true
-      
+  push:
 
 permissions:
   id-token: write
@@ -39,8 +18,8 @@ jobs:
       - name: Fetch CodeDeploy Application and Deployment Group Names
         uses: ./.github/actions/fetch-codedeployment-name
         with:
-          environment: ${{ github.event.inputs.environment_name }}
-          service_name: ${{ github.event.inputs.service_name }}
+          environment: int
+          service_name: ecom
         id: get_names
 
       - name: Monitor Deployment Status
