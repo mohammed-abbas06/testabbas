@@ -16,15 +16,14 @@ jobs:
     steps:
 
       - uses: actions/checkout@v4
-      - name: Fetch CodeDeploy Application and Deployment Group Names
+      - name: Assign CodeDeploy Names
+        id: codedeploy
         uses: ./.github/actions/assign_env
         with:
-          environment: int
-          service_name: ecom
-        id: get_names
-
-      - name: Monitor Deployment Status
-        shell: bash
+          environment: stage
+          service_name: ecom-atcw
+      
+      - name: Display Assigned Names
         run: |
-          echo ${{ steps.get_names.outputs.app_name }}
-          echo ${{ steps.get_names.outputs.group_name }}
+          echo "Assigned Application Name: ${{ steps.codedeploy.outputs.app_name }}"
+          echo "Assigned Group Name: ${{ steps.codedeploy.outputs.group_name }}"
