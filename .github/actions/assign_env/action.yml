@@ -10,9 +10,11 @@ inputs:
 
 outputs:
   app_name:
-    description: 'The CodeDeploy application name.'
+    description: The CodeDeploy application name.
+    value: ${{ steps.get_names.outputs.app_name }}
   group_name:
-    description: 'The CodeDeploy deployment group name.'
+    description: The CodeDeploy deployment group name.
+    value: ${{ steps.get_names.outputs.group_name }}
 
 runs:
   using: "composite"
