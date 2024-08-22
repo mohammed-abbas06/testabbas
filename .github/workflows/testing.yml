@@ -16,7 +16,7 @@ jobs:
     steps:
       
       - name: Fetch CodeDeploy Application and Deployment Group Names
-        uses: ./.github/actions/fetch-codedeployment-name
+        uses: ./.github/actions/assign-env
         with:
           environment: int
           service_name: ecom
