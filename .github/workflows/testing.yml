@@ -1,56 +1,50 @@
-name: ems_po_legacy_service
-run-name: ${{ github.actor }} triggered ems po legacy service stack deploy
+name: "Pre prod ECS Deployment"
+run-name: ${{ github.actor }} has triggered ECS Deployment to ${{ github.event.inputs.environment_name }}
+
 
 on:
-  push
+  workflow_dispatch:
+    inputs:
+      environment_name:
+        description: 'enter the environment'
+        type: choice
+        options:
+          - int
+          - qa
+          - stage
+        required: true
+      service_name:
+        type: choice
+        options:
+          - ecom
+          - ecom-atcw
+          - ecom-emsw
+          - ecom-ems-notification
+          - ecom-processor
+          - ecom-plan
+        description: 'enter the service name'
+        required: true
+      
 
 permissions:
   id-token: write
-  contents: read
-  
-env:
-  region: 'us-west-2'
-  prod_deploy: 'false'
-  VERSION: 0.0.${{ github.run_number }}
+  contents: write
 
-jobs: 
-  sam_deployment:
+jobs:
+
+  ecs-deployment:
     runs-on: ubuntu-latest
-    
     steps:
-      # - name: Build with Gradle    
-      #   if: success() || failure()
-      #   id: build_step
-      #   run: exit 1
-      - name: Git clone the repository
-        uses: actions/checkout@v3
+      
+      - name: Fetch CodeDeploy Application and Deployment Group Names
+        uses: ./.github/actions/fetch-codedeployment-name
+        with:
+          environment: ${{ github.event.inputs.environment_name }}
+          service_name: ${{ github.event.inputs.service_name }}
+        id: get_names
 
-      - name: Set Version from Branch Name
-        id: set_version
+      - name: Monitor Deployment Status
+        shell: bash
         run: |
-          if echo "${{ github.ref_name }}" | grep -Eiq '^release/R[0-9]+\.[0-9]+\.[0-9]+$'; then
-            VERSION=$(echo "${{ github.ref_name }}" | sed -E 's/^release\/R([0-9]+\.[0-9]+\.[0-9]+)$/\1/')
-            echo "VERSION=$VERSION" >> $GITHUB_ENV
-            echo $VERSION
-          else
-            echo "VERSION=0.0.${{ github.run_number }}" >> $GITHUB_ENV
-            echo $VERSION
-          fi
-          
-      # - name: test
-      #   working-directory: ./ems-v3-v4-migration
-      #   if: success() || failure()
-      #   run: |
-      #     for file in *; do
-      #       if [ -f "$file" ]; then
-      #         mkdir -p nodejs/node_modules
-      #         cd nodejs/node_modules
-      #         cp ../../$file .
-      #         cd ../../
-      #         filename=$(basename "$file" .${file##*.})
-      #         zip "$filename.zip" "$file"
-      #       fi
-      #     done
-      #     ls
-      #     cd nodejs/node_modules/
-      #     ls
+          echo ${{ steps.get_names.outputs.app_name }}
+          echo ${{ steps.get_names.outputs.group_name }}
