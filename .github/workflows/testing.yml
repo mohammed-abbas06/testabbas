@@ -16,7 +16,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set Version from Branch Name
-        if: github.event.pull_request.merged == true
         uses: ./.github/actions/assign_env
         with:
           ref_name: ${{ github.event.pull_request.head.ref }}
