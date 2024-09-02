@@ -1,28 +1,29 @@
-name: 'Hello World'
-description: 'Greet someone'
+name: "Set Version from Branch Name"
+description: "Sets the version based on the branch name, or defaults to 0.0.run_number"
 inputs:
-  environment_name:  # id of input
-    description: 'enter the env_name'
+  ref_name:
+    description: "The branch name or tag reference"
+    required: true
+  run_number:
+    description: "The GitHub run number"
     required: true
 
-
 outputs:
-  env_value:
-    description: "Random number"
-    value: ${{ steps.set_env.outputs.github_env }}
+  version:
+    description: "The version string extracted from the branch name or generated based on the run number"
+    value: ${{ steps.set_version.outputs.VERSION }}
+
 runs:
   using: "composite"
   steps:
-    - name: assign env
-      id: set_env
-      run: |
-          if echo "${{ inputs.environment_name }}" | grep -Eq '^dev[1-9]$'; then
-            echo "env=dev"
-            github_env="dev"
-          else
-            echo "env=${{ inputs.environment_name }}"
-            github_env=${{ inputs.environment_name }}
-          fi
-          echo "github_env=$github_env" >> $GITHUB_OUTPUT
+    - name: Set Version
+      id: set_version
       shell: bash
-
+      run: |
+        if echo "${{ inputs.ref_name }}" | grep -Eiq '^release/[Rr][0-9]+\.[0-9]+\.[0-9]+$'; then
+          VERSION=$(echo "${{ inputs.ref_name }}" | sed -E 's/^release\/[Rr]([0-9]+\.[0-9]+\.[0-9]+)$/\1/')
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+        else
+          VERSION="0.0.${{ inputs.run_number }}"
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+        fi

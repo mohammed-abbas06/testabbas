@@ -1,56 +1,26 @@
-name: ems_po_legacy_service
-run-name: ${{ github.actor }} triggered ems po legacy service stack deploy
+name: Check tag
 
 on:
-  push
+  workflow_dispatch:
 
 permissions:
   id-token: write
-  contents: read
-  
-env:
-  region: 'us-west-2'
-  prod_deploy: 'false'
-  VERSION: 0.0.${{ github.run_number }}
+  contents: write
+  checks: write
 
-jobs: 
-  sam_deployment:
+jobs:
+      
+  tag:
     runs-on: ubuntu-latest
-    
     steps:
-      # - name: Build with Gradle    
-      #   if: success() || failure()
-      #   id: build_step
-      #   run: exit 1
-      - name: Git clone the repository
-        uses: actions/checkout@v3
-
+      - uses: actions/checkout@v4
       - name: Set Version from Branch Name
+        uses: ./.github/actions/assign_env
+        with:
+          ref_name: ${{ github.ref_name }}
+          run_number: ${{ github.run_number }}
         id: set_version
-        run: |
-          if echo "${{ github.ref_name }}" | grep -Eiq '^release/R[0-9]+\.[0-9]+\.[0-9]+$'; then
-            VERSION=$(echo "${{ github.ref_name }}" | sed -E 's/^release\/R([0-9]+\.[0-9]+\.[0-9]+)$/\1/')
-            echo "VERSION=$VERSION" >> $GITHUB_ENV
-            echo $VERSION
-          else
-            echo "VERSION=0.0.${{ github.run_number }}" >> $GITHUB_ENV
-            echo $VERSION
-          fi
-          
-      - name: test
-        working-directory: ./ems-v3-v4-migration
-        if: success() || failure()
-        run: |
-          for file in *; do
-            if [ -f "$file" ]; then
-              mkdir -p nodejs/node_modules
-              cd nodejs/node_modules
-              cp ../../$file .
-              cd ../../
-              filename=$(basename "$file" .${file##*.})
-              zip "$filename.zip" "$file"
-            fi
-          done
-          ls
-          cd nodejs/node_modules/
-          ls
+        
+      - name: display output 
+        shell: bash
+        run: echo ${{ steps.set_version.outputs.version }}

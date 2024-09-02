@@ -16,17 +16,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Check user permission
-        uses: ./.github/actions/checks_permission
-        with: 
-          github_actor: ${{ github.actor }}
-          environment_name: ${{ github.event.inputs.env }}
-
-      - name: Assign Environment
-        id: set_env
+      - name: Set Version from Branch Name
         uses: ./.github/actions/assign_env
         with:
-          environment_name: ${{ github.event.inputs.env }}
+          ref_name: ${{ github.ref_name }}
+          run_number: ${{ github.run_number }}
+        id: set_version
+
+      # - name: Check user permission
+      #   uses: ./.github/actions/checks_permission
+      #   with: 
+      #     github_actor: ${{ github.actor }}
+      #     environment_name: ${{ github.event.inputs.env }}
+
+      # - name: Assign Environment
+      #   id: set_env
+      #   uses: ./.github/actions/assign_env
+      #   with:
+      #     environment_name: ${{ github.event.inputs.env }}
 
       - name: print env
-        run: echo ${{ steps.set_env.outputs.env_value }}
+        run: echo ${{ steps.set_version.outputs.version }}
