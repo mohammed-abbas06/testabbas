@@ -20,6 +20,7 @@ jobs:
           ref_name: ${{ github.ref_name }}
           run_number: ${{ github.run_number }}
         id: set_version
+        
       - name: display output 
         shell: bash
         run: echo ${{ steps.set_version.outputs.version }}
