@@ -1,29 +1,25 @@
-name: "Pre prod ECS Deployment"
-run-name: ${{ github.actor }} has triggered ECS Deployment to ${{ github.event.inputs.environment_name }}
-
+name: Check tag
 
 on:
-  push:
+  workflow_dispatch:
 
 permissions:
   id-token: write
   contents: write
+  checks: write
 
 jobs:
-
-  ecs-deployment:
+      
+  tag:
     runs-on: ubuntu-latest
     steps:
-
       - uses: actions/checkout@v4
-      - name: Assign CodeDeploy Names
-        id: codedeploy
+      - name: Set Version from Branch Name
         uses: ./.github/actions/assign_env
         with:
-          environment: stage
-          service_name: ecom-atcw
-      
-      - name: Display Assigned Names
-        run: |
-          echo "Assigned Application Name: ${{ steps.codedeploy.outputs.app_name }}"
-          echo "Assigned Group Name: ${{ steps.codedeploy.outputs.group_name }}"
+          ref_name: ${{ github.ref_name }}
+          run_number: ${{ github.run_number }}
+        id: set_version
+      - name: display output 
+        shell: bash
+        run: echo ${{ steps.set_version.outputs.version }}
