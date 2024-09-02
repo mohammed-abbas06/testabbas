@@ -1,8 +1,9 @@
 name: Check tag
 
 on:
-  push:
-    branches: [ main ]
+  pull_request:
+    types:
+      - closed
 
 permissions:
   id-token: write
@@ -12,6 +13,7 @@ permissions:
 jobs:
       
   tag:
+    if: github.event.pull_request.merged == true && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
