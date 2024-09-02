@@ -1,127 +1,29 @@
-name: Assign CodeDeploy Application and Group Names
-description: Assigns the CodeDeploy application name and deployment group name based on the environment and service name.
+name: "Set Version from Branch Name"
+description: "Sets the version based on the branch name, or defaults to 0.0.run_number"
 inputs:
-  environment:
-    description: 'The environment name (e.g., int, stage, qa).'
+  ref_name:
+    description: "The branch name or tag reference"
     required: true
-  service_name:
-    description: 'The service name (e.g., ecom-atcw, ecom-api).'
+  run_number:
+    description: "The GitHub run number"
     required: true
 
 outputs:
-  app_name:
-    description: The CodeDeploy application name.
-    value: ${{ steps.get_names.outputs.app_name }}
-  group_name:
-    description: The CodeDeploy deployment group name.
-    value: ${{ steps.get_names.outputs.group_name }}
+  version:
+    description: "The version string extracted from the branch name or generated based on the run number"
+    value: ${{ steps.set_version.outputs.VERSION }}
 
 runs:
   using: "composite"
   steps:
-    - name: Determine CodeDeploy Application and Group Names
-      id: get_names
+    - name: Set Version
+      id: set_version
       shell: bash
       run: |
-        case "${{ inputs.environment }}" in
-          int)
-            case "${{ inputs.service_name }}" in
-              ecom)
-                APP_NAME="AppECS-tc-int-ms-fargate-cluster-ecom-api-int-new"
-                GROUP_NAME="DgpECS-tc-int-ms-fargate-cluster-ecom-api-int-new"
-                ;;
-              ecom-atcw)
-                APP_NAME="AppECS-tc-int-ms-fargate-cluster-ecom-atcw-api-int-new"
-                GROUP_NAME="DgpECS-tc-int-ms-fargate-cluster-ecom-atcw-api-int-new"
-                ;;
-              ecom-ems-notification)
-                APP_NAME="AppECS-tc-int-ms-fargate-cluster-ecom-ems-notification-api-int"
-                GROUP_NAME="DgpECS-tc-int-ms-fargate-cluster-ecom-ems-notification-api-int"
-                ;;
-              ecom-emsw)
-                APP_NAME="AppECS-tc-int-ms-fargate-cluster-ecom-emsw-api-int-new"
-                GROUP_NAME="DgpECS-tc-int-ms-fargate-cluster-ecom-emsw-api-int-new"
-                ;;
-              ecom-processor)
-                APP_NAME="AppECS-tc-int-ms-fargate-cluster-ecom-usage-processor"
-                GROUP_NAME="DgpECS-tc-int-ms-fargate-cluster-ecom-usage-processor"
-                ;;
-              *)
-                echo "Service name not recognized for environment 'int'."
-                exit 1
-                ;;
-            esac
-            ;;
-          qa)
-            case "${{ inputs.service_name }}" in
-              ecom)
-                APP_NAME="AppECS-tc-qa-ms-fargate-cluster-ecom-api-qa"
-                GROUP_NAME="DgpECS-tc-qa-ms-fargate-cluster-ecom-api-qa"
-                ;;
-              ecom-atcw)
-                APP_NAME="AppECS-tc-qa-ms-fargate-cluster-ecom-atcw-api-qa"
-                GROUP_NAME="DgpECS-tc-qa-ms-fargate-cluster-ecom-atcw-api-qa"
-                ;;
-              ecom-ems-notification)
-                APP_NAME="AppECS-tc-qa-ms-fargate-cluster-ems-notification-qa"
-                GROUP_NAME="DgpECS-tc-qa-ms-fargate-cluster-ems-notification-qa"
-                ;;
-              ecom-emsw)
-                APP_NAME="AppECS-tc-qa-ms-fargate-cluster-ecom-emsw-api-qa"
-                GROUP_NAME="DgpECS-tc-qa-ms-fargate-cluster-ecom-emsw-api-qa"
-                ;;
-              ecom-processor)
-                APP_NAME="AppECS-tc-qa-ms-fargate-cluster-ecom-usage-api-qa"
-                GROUP_NAME="DgpECS-tc-qa-ms-fargate-cluster-ecom-usage-api-qa"
-                ;;
-              ecom-plan)
-                APP_NAME="AppECS-tc-qa-ms-fargate-cluster-ecom-plan-api-qa"
-                GROUP_NAME="DgpECS-tc-qa-ms-fargate-cluster-ecom-plan-api-qa"
-                ;;
-              *)
-                echo "Service name not recognized for environment 'qa'."
-                exit 1
-                ;;
-            esac
-            ;;
-          stage)
-            case "${{ inputs.service_name }}" in
-              ecom)
-                APP_NAME="AppECS-tc-stage-ms-fargate-cluster-ecom-api-stage"
-                GROUP_NAME="DgpECS-tc-stage-ms-fargate-cluster-ecom-api-stage"
-                ;;
-              ecom-atcw)
-                APP_NAME="AppECS-tc-stage-ms-fargate-cluster-ecom-atcw-api-stage"
-                GROUP_NAME="DgpECS-tc-stage-ms-fargate-cluster-ecom-atcw-api-stage"
-                ;;
-              ecom-ems-notification)
-                APP_NAME="AppECS-tc-stage-ms-fargate-cluster-ems-notification-stage"
-                GROUP_NAME="DgpECS-tc-stage-ms-fargate-cluster-ems-notification-stage"
-                ;;
-              ecom-emsw)
-                APP_NAME="AppECS-tc-stage-ms-fargate-cluster-ecom-emsw-api-stage"
-                GROUP_NAME="DgpECS-tc-stage-ms-fargate-cluster-ecom-emsw-api-stage"
-                ;;
-              ecom-processor)
-                APP_NAME="AppECS-tc-stage-ms-fargate-cluster-ecom-usage-api-stage"
-                GROUP_NAME="DgpECS-tc-stage-ms-fargate-cluster-ecom-usage-api-stage"
-                ;;
-              ecom-plan)
-                APP_NAME="AppECS-tc-stage-ms-fargate-cluster-ecom-plan-api-stage"
-                GROUP_NAME="DgpECS-tc-stage-ms-fargate-cluster-ecom-plan-api-stage"
-                ;;
-              *)
-                echo "Service name not recognized for environment 'stage'."
-                exit 1
-                ;;
-            esac
-            ;;
-          *)
-            echo "Environment not recognized."
-            exit 1
-            ;;
-        esac
-        echo "APP_NAME=$APP_NAME" >> $GITHUB_ENV
-        echo "GROUP_NAME=$GROUP_NAME" >> $GITHUB_ENV
-        echo "app_name=$APP_NAME" >> $GITHUB_OUTPUT
-        echo "group_name=$GROUP_NAME" >> $GITHUB_OUTPUT
+        if echo "${{ inputs.ref_name }}" | grep -Eiq '^release/[Rr][0-9]+\.[0-9]+\.[0-9]+$'; then
+          VERSION=$(echo "${{ inputs.ref_name }}" | sed -E 's/^release\/[Rr]([0-9]+\.[0-9]+\.[0-9]+)$/\1/')
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+        else
+          VERSION="0.0.${{ inputs.run_number }}"
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+        fi
