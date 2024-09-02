@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set Version from Branch Name
-        uses: ./.github/actions/set-version
+        uses: ./.github/actions/assign_env
         with:
           ref_name: ${{ github.ref_name }}
           run_number: ${{ github.run_number }}
