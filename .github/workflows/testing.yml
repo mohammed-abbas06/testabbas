@@ -26,4 +26,7 @@ jobs:
         
       - name: display output 
         shell: bash
-        run: echo ${{ steps.set_version.outputs.version }}
+        run: |
+          echo ${{ steps.set_version.outputs.version }}
+          VERSION=$(echo $steps.set_version.outputs.version | sed 's/^Release\///')
+          echo $VERSION"
