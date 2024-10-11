@@ -19,7 +19,7 @@ jobs:
         shell: bash
         run: |
           deployment_output='{"deploymentId": "d-LH5VT18K8"}'
-          deployment_id=${deployment_output:1:-1}
+          deployment_id=(echo $deployment_output | jq -r '.deploymentId')
           echo "This is the $deployment_id"
           echo "DEPLOYMENT_ID=$deployment_id" >> $GITHUB_ENV
           echo "DEPLOYMENT_ID=$deployment_id" >> $GITHUB_OUTPUT
