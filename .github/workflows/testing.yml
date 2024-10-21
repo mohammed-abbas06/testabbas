@@ -26,6 +26,6 @@ jobs:
           for i in "${!apps[@]}"; do
             app="${apps[$i]}"
             dep="${deps[$i]}"
-            echo "Deploying Application: $app, Deployment Group: $dep"
+            echo "Deploying Application: $app - Deployment Group: $dep"
             # Insert your deployment command here
           done
