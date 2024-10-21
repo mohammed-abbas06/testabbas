@@ -18,16 +18,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set Version from Branch Name
-        uses: ./.github/actions/assign_env
-        with:
-          ref_name: ${{ github.event.pull_request.head.ref }}
-          run_number: ${{ github.run_number }}
-        id: set_version
-        
-      - name: display output 
         shell: bash
         run: |
-          FULL_VERSION=${{ steps.set_version.outputs.version }}
-          echo "$FULL_VERSION"
-          VERSION=$(echo "$FULL_VERSION" | sed 's/^Release\/R//I')
-          echo "$VERSION"
+          application_name="app1,app2,app3"
+          # Using tr to split the string by commas
+          echo "$application_name" | tr ',' '\n' | while read app; do
+            echo "Deploying Application: $app"
+            # Insert your deployment command here
+          done
