@@ -17,9 +17,15 @@ jobs:
       - name: Set Version from Branch Name
         shell: bash
         run: |
-          application_name="app1,app2,app3"
-          # Using tr to split the string by commas
-          echo "$application_name" | tr ',' '\n' | while read app; do
-            echo "Deploying Application: $app"
+          application_name=${{ vars.APPLICATION_NAME }}
+          deployment_group=${{ vars.DEPLOYMENT_GROUP }}
+            # Loop through the arrays and deploy
+          # Split both variables by commas
+          IFS=',' read -r -a apps <<< "$application_name"
+          IFS=',' read -r -a deps <<< "$deployment_group"
+          for i in "${!apps[@]}"; do
+            app="${apps[$i]}"
+            dep="${deps[$i]}"
+            echo "Deploying Application: $app, Deployment Group: $dep"
             # Insert your deployment command here
           done
