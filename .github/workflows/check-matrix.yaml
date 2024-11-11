@@ -51,7 +51,7 @@ jobs:
         
       - name: test
         run: |
-          echo ${{ needs.define_matrix.outputs.pods }}
+          echo ${{ fromJSON(needs.define-matrix.outputs.colors) }}
         shell: bash
         
          
