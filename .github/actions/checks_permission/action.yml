@@ -40,6 +40,7 @@ runs:
       run: |
         case "${{ inputs.environment }}" in
           int)
+            echo 'pods=["us1"]'
             echo 'pods=["us1"]' >> "$GITHUB_OUTPUT"
             ;;
           qa)
