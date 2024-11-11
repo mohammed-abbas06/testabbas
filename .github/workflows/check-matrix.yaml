@@ -35,7 +35,9 @@ jobs:
       - name: Define Colors
         id: pod
         run: |
-          echo "pods=$(echo '["int-us1", "int-eu1"]' | jq -c)" >> "$GITHUB_OUTPUT"
+          echo '["int-us1", "int-eu1"]' > pods.json
+          echo "pods=$(cat pods.json)" >> "$GITHUB_ENV"
+          echo "pods=$(cat pods.json)" >> "$GITHUB_OUTPUT"
 
           
   define-pod:
