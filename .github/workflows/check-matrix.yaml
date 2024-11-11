@@ -46,14 +46,14 @@ jobs:
         run: |
           case "${{ github.event.inputs.environment_name }}" in
             int)
-              echo 'pod=["us1","eu1"]'
-              echo 'pod=["us1","eu1"]' >> "$GITHUB_OUTPUT"
+              echo 'pods=["us1","eu1"]'
+              echo 'pods=["us1","eu1"]' >> "$GITHUB_OUTPUT"
               ;;
             qa)
-              echo 'pod=["us1", "eu1"]' >> "$GITHUB_OUTPUT"
+              echo 'pods=["us1", "eu1"]' >> "$GITHUB_OUTPUT"
               ;;
             stage)
-              echo 'pod=["us1", "ap1", "ap2"]' >> "$GITHUB_OUTPUT"
+              echo 'pods=["us1", "ap1", "ap2"]' >> "$GITHUB_OUTPUT"
               ;;
             *)
               echo "Environment not recognized."
