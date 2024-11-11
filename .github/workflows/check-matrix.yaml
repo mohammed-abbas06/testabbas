@@ -44,7 +44,7 @@ jobs:
       - name: Define Colors
         id: pod
         run: |
-          case "${{ github.events.inputs.environment_name }}" in
+          case "${{ github.event.inputs.environment_name }}" in
             int)
               echo 'pod=["us1","eu1"]'
               echo 'pod=["us1","eu1"]' >> "$GITHUB_OUTPUT"
