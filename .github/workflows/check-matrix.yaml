@@ -42,6 +42,9 @@ jobs:
         region: ${{ fromJSON(needs.define-matrix.outputs.pods) }}
     environment: ${{ github.event.inputs.environment_name }}-${{ matrix.region }}   # Pass the region directly here
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
       - name: test
         run: |
           echo ${{ vars.region}}
