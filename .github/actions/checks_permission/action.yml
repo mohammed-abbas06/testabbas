@@ -1,21 +1,57 @@
-name: 'Hello World'
-description: 'Greet someone'
+# name: 'Hello World'
+# description: 'Greet someone'
+# inputs:
+#   github_actor:  # id of input
+#     description: 'collects the github actor'
+#     required: true
+#   environment_name:
+#     description: 'enter the env name'
+#     required: true
+# env:
+#   validStgProdDeployUsers: 'madhessekar,Bharathr1,Mohamed-Kalandar-Sulaiman-S,mohammed-abbas06'
+# runs:
+#   using: "composite"
+#   steps:
+#     - name: Check if the user has permission to deploy
+#       if: ${{ (inputs.environment_name == 'prod' || inputs.environment_name == 'stg') && !(contains(env.validStgProdDeployUsers, inputs.github_actor)) }}
+#       run: |
+#         echo "the user does not have permission"
+#         exit 1
+#       shell: bash
+
+name: Assign Pod based on environment
+description: Assign Pod based on environment
 inputs:
-  github_actor:  # id of input
-    description: 'collects the github actor'
+  environment:
+    description: 'The environment name (e.g., int, stage, qa).'
     required: true
-  environment_name:
-    description: 'enter the env name'
-    required: true
-env:
-  validStgProdDeployUsers: 'madhessekar,Bharathr1,Mohamed-Kalandar-Sulaiman-S,mohammed-abbas06'
+
+outputs:
+  pods:
+    description: 'The pods to assign.'
+    value: ${{ steps.get_pods.outputs.pods }}
+
 runs:
   using: "composite"
   steps:
-    - name: Check if the user has permission to deploy
-      if: ${{ (inputs.environment_name == 'prod' || inputs.environment_name == 'stg') && !(contains(env.validStgProdDeployUsers, inputs.github_actor)) }}
-      run: |
-        echo "the user does not have permission"
-        exit 1
+    - name: Assign pods
+      id: get_pods
       shell: bash
+      run: |
+        case "${{ inputs.environment }}" in
+          int)
+            echo 'pods=["us1"]' >> "$GITHUB_OUTPUT"
+            ;;
+          qa)
+            echo 'pods=["us1", "eu1"]' >> "$GITHUB_OUTPUT"
+            ;;
+          stage)
+            echo 'pods=["us1", "ap1", "ap2"]' >> "$GITHUB_OUTPUT"
+            ;;
+          *)
+            echo "Environment not recognized."
+            exit 1
+            ;;
+        esac
+
 
