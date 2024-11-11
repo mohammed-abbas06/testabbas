@@ -47,7 +47,7 @@ jobs:
     steps:
       - name: test
         run: |
-          echo ${{ var.region}}
+          echo ${{ vars.region}}
         shell: bash
         
          
