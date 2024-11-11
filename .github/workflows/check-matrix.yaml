@@ -50,17 +50,14 @@ jobs:
   define-pod:
     runs-on: ubuntu-latest
     needs: define-matrix
-    # strategy:
-    #   matrix:
-    #     region: ${{ fromJSON(needs.define-matrix.outputs.pods) }}
-    # environment: ${{ github.event.inputs.environment_name }}-${{ matrix.region }}   # Pass the region directly here
+    strategy:
+      matrix:
+        region: ${{ fromJSON(needs.define-matrix.outputs.pod) }}
+    environment: int-${{ matrix.region }}   # Pass the region directly here
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        
       - name: test
         run: |
-          echo ${{ fromJSON(needs.define-matrix.outputs.pod) }}
+          echo ${{ vars.region}}
         shell: bash
         
          
