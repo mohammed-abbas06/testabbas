@@ -27,27 +27,27 @@ inputs:
     required: true
 
 outputs:
-  pods:
+  pod:
     description: 'The pods to assign.'
-    value: ${{ steps.get_pods.outputs.pod }}
+    value: ${{ steps.pod.outputs.pods }}
 
 runs:
   using: "composite"
   steps:
     - name: Assign pods
-      id: get_pods
+      id: pod
       shell: bash
       run: |
         case "${{ inputs.environment }}" in
           int)
-            echo 'pod=["us1"]'
-            echo 'pod=["us1"]' >> "$GITHUB_OUTPUT"
+            echo 'pods=["us1"]'
+            echo 'pods=["us1"]' >> "$GITHUB_OUTPUT"
             ;;
           qa)
-            echo 'pod=["us1", "eu1"]' >> "$GITHUB_OUTPUT"
+            echo 'pods=["us1", "eu1"]' >> "$GITHUB_OUTPUT"
             ;;
           stage)
-            echo 'pod=["us1", "ap1", "ap2"]' >> "$GITHUB_OUTPUT"
+            echo 'pods=["us1", "ap1", "ap2"]' >> "$GITHUB_OUTPUT"
             ;;
           *)
             echo "Environment not recognized."
