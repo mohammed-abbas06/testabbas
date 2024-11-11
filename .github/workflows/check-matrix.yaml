@@ -39,7 +39,7 @@ jobs:
     needs: define-matrix
     strategy:
       matrix:
-        region: ${{ fromJSON(needs.define-matrix.outputs.pod) }}
+        region: ${{ fromJSON(needs.define-matrix.outputs.pods) }}
     environment: ${{ github.event.inputs.environment_name }}-${{ matrix.region }}   # Pass the region directly here
     steps:
       - name: test
