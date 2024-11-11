@@ -51,7 +51,7 @@ jobs:
         
       - name: test
         run: |
-          echo ${{ steps.get_pods.outputs.pods }}
+          echo ${{ needs.get_pods.outputs.pods }}
         shell: bash
         
          
