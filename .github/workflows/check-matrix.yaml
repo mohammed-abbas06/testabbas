@@ -67,7 +67,7 @@ jobs:
     needs: define-matrix
     strategy:
       matrix:
-        region: ${{ fromJSON(needs.define-matrix.outputs.pod) }}
+        region: ${{ fromJSON(needs.define-matrix.outputs.get_pods) }}
     environment: int-${{ matrix.region }}   # Pass the region directly here
     steps:
       - name: test
