@@ -38,7 +38,7 @@ jobs:
           environment: ${{ github.event.inputs.environment_name }}
           
     outputs:
-    pod: ${{ steps.get_pods.outputs.pod }}
+      pod: ${{ steps.get_pods.outputs.pod }}
           
   define-pod:
     runs-on: ubuntu-latest
