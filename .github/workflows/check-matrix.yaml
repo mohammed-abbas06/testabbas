@@ -24,11 +24,25 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+
+  define-matrix:
+    runs-on: ubuntu-latest
+
+    outputs:
+      pod: ${{ steps.pod.outputs.pods }}
+
+    steps:
+      - name: Define Colors
+        id: pod
+        run: |
+          echo 'pods=["int-us1", "int-eu1"]' >> "$GITHUB_OUTPUT"
+
+          
   define-pod:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        region: ${{ fromJson('{"int": ["int-us1"], "qa": ["qa-us1", "qa-eu1"], "stg": ["stg-us1", "stg-ap1", "stg-ap2"]}')[github.event.inputs.environment] }}
+        region: ${{ fromJSON(needs.define-matrix.outputs.pod) }}
     environment: ${{ matrix.region }}   # Pass the region directly here
     steps:
       - name: test
