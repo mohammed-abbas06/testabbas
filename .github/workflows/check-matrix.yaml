@@ -35,14 +35,14 @@ jobs:
       - name: Define Colors
         id: pod
         run: |
-          echo "pods=[us1, eu1]" >> "$GITHUB_OUTPUT"
+          echo 'pods=["us1", "eu1"]' >> "$GITHUB_OUTPUT"
 
           
   define-pod:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        region: ${{ needs.define-matrix.outputs.pod }}
+        region: ${{ fromJSON(needs.define-matrix.outputs.pod) }}
     environment: int-${{ matrix.region }}   # Pass the region directly here
     steps:
       - name: test
