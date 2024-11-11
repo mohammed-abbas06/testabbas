@@ -27,39 +27,39 @@ jobs:
 
   define-matrix:
     runs-on: ubuntu-latest
-    # steps:
-    #   - name: Checkout code
-    #     uses: actions/checkout@v4
-        
-    #   - name: Get Pods
-    #     id: get_pods
-    #     uses: ./.github/actions/checks_permission
-    #     with:
-    #       environment: ${{ github.event.inputs.environment_name }}
-
-    outputs:
-      pod: ${{ steps.pod.outputs.pods }}
-
     steps:
-      - name: Define Colors
-        id: pod
-        run: |
-          case "${{ github.event.inputs.environment_name }}" in
-            int)
-              echo 'pods=["us1","eu1"]'
-              echo 'pods=["us1","eu1"]' >> "$GITHUB_OUTPUT"
-              ;;
-            qa)
-              echo 'pods=["us1", "eu1"]' >> "$GITHUB_OUTPUT"
-              ;;
-            stage)
-              echo 'pods=["us1", "ap1", "ap2"]' >> "$GITHUB_OUTPUT"
-              ;;
-            *)
-              echo "Environment not recognized."
-              exit 1
-              ;;
-          esac
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Get Pods
+        id: get_pods
+        uses: ./.github/actions/checks_permission
+        with:
+          environment: ${{ github.event.inputs.environment_name }}
+
+    # outputs:
+    #   pod: ${{ steps.pod.outputs.pods }}
+
+    # steps:
+    #   - name: Define Colors
+    #     id: pod
+    #     run: |
+    #       case "${{ github.event.inputs.environment_name }}" in
+    #         int)
+    #           echo 'pods=["us1","eu1"]'
+    #           echo 'pods=["us1","eu1"]' >> "$GITHUB_OUTPUT"
+    #           ;;
+    #         qa)
+    #           echo 'pods=["us1", "eu1"]' >> "$GITHUB_OUTPUT"
+    #           ;;
+    #         stage)
+    #           echo 'pods=["us1", "ap1", "ap2"]' >> "$GITHUB_OUTPUT"
+    #           ;;
+    #         *)
+    #           echo "Environment not recognized."
+    #           exit 1
+    #           ;;
+    #       esac
 
           
   define-pod:
