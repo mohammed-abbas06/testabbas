@@ -34,8 +34,8 @@ jobs:
         shell: bash
         run: |
         # Input: Comma-separated list of Auto Scaling Group (ASG) names
-        asg_names="test1,test2"
-        echo $asg_names
+          asg_names="test1,test2"
+          echo $asg_names
 
         # Convert the comma-separated string into an array
         # IFS=',' read -r -a asg <<< "$asg_names"    
