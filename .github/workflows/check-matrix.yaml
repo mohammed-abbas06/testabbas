@@ -33,7 +33,7 @@ jobs:
       - name: test
         shell: bash
         run: |
-        # Input: Comma-separated list of Auto Scaling Group (ASG) names
+          # Input: Comma-separated list of Auto Scaling Group (ASG) names
           asg_names="test1,test2"
           echo $asg_names
 
