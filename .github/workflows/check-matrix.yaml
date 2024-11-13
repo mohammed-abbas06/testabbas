@@ -34,17 +34,18 @@ jobs:
         shell: bash
         run: |
         # Input: Comma-separated list of Auto Scaling Group (ASG) names
-        asg_names="test1,test2"  # e.g., "asg1,asg2,asg3"
+        asg_names="test1,test2"
+        echo $asg_names
 
         # Convert the comma-separated string into an array
-        IFS=',' read -r -a asg <<< "$asg_names"    
-        echo "ASG Names in array: ${asg[@]}"
+        # IFS=',' read -r -a asg <<< "$asg_names"    
+        # echo "ASG Names in array: ${asg[@]}"
 
-        # Update each ASG to have a desired capacity of 1
-        for ASG_NAME in "${asg[@]}"; do
-          echo "Updating the Apputil instances to 1 for Auto Scaling Group: $ASG_NAME"
-          echo "${ASG_NAME}"
-        done
+        # # Update each ASG to have a desired capacity of 1
+        # for ASG_NAME in "${asg[@]}"; do
+        #   echo "Updating the Apputil instances to 1 for Auto Scaling Group: $ASG_NAME"
+        #   echo "${ASG_NAME}"
+        # done
     
         
 
