@@ -30,7 +30,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         
-      - name: mytest
+      - name: test
         shell: bash
         run: |
         # Input: Comma-separated list of Auto Scaling Group (ASG) names
