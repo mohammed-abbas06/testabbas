@@ -30,19 +30,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         
-      - name: test
-        shell: bash
+      - name: Chat notification for errors
         run: |
-          # Input: Comma-separated list of Auto Scaling Group (ASG) names
-          asg_names="test1,test2"
-          echo $asg_names
-          # Convert the comma-separated string into an array
-          IFS=',' read -r -a asg <<< "$asg_names"   
-          echo "ASG Names in array: ${asg[@]}"
-          for ASG_NAME in "${asg[@]}"; do
-            echo "Updating the Apputil instances to 1 for Auto Scaling Group: $ASG_NAME"
-            echo "${ASG_NAME}"
-          done
+          # message="*Whitesource scan error!*"
+          # message+=$'\n\n'
+          # message+="${{env.ws_scan_error}}"
+          # message+=$'\n\n'
+          # message+="*End of message*"
+  
+          payload=$(jq -n --arg msg "$message" '{ text: "message from github" }')
+          curl -X POST -H "Content-Type: text/plain" --data "$payload" "https://chat.googleapis.com/v1/spaces/AAAA_pSsBgQ/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=9YXYNNZ6P56uIiO4tUnGIs00Yo4Hbb-r-8m1pbZ_j5E"
+        shell: bash
     
         
 
