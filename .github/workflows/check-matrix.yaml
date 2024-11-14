@@ -32,13 +32,9 @@ jobs:
         
       - name: Chat notification for errors
         run: |
-          # message="*Whitesource scan error!*"
-          # message+=$'\n\n'
-          # message+="${{env.ws_scan_error}}"
-          # message+=$'\n\n'
-          # message+="*End of message*"
+          message="my test message"
   
-          payload=$(jq -n --arg msg "$message" '{ text: "message from github" }')
+          payload=$(jq -n --arg msg "$message" '{ text: $message }')
           curl -X POST -H "Content-Type: text/plain" --data "$payload" "https://chat.googleapis.com/v1/spaces/AAAA_pSsBgQ/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=9YXYNNZ6P56uIiO4tUnGIs00Yo4Hbb-r-8m1pbZ_j5E"
         shell: bash
     
