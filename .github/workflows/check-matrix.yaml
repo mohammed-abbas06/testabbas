@@ -32,6 +32,7 @@ jobs:
       - name: test
         run: |
           echo "pass"
+          exit 1
         shell: bash
         
       - name: Chat notification for errors
