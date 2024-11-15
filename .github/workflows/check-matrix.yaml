@@ -31,29 +31,29 @@ jobs:
         uses: actions/checkout@v4
       - name: test
         run: |
-          echo "pass"
-        shell: bash
+          sed -i "s#test=VAL#test=MYNEWVAR#" gteam_env.properties
+        shell: bash        
         
-      - name: Chat notification for errors
-        if: ${{ failure() }}
-        run: |
-          message="failed"
+      # - name: Chat notification for errors
+      #   if: ${{ failure() }}
+      #   run: |
+      #     message="failed"
   
-          payload=$(jq -n --arg msg "$message" '{ text: $msg }')
-          curl -X POST -H "Content-Type: text/plain" --data "$payload" "https://chat.googleapis.com/v1/spaces/AAAA_pSsBgQ/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=9YXYNNZ6P56uIiO4tUnGIs00Yo4Hbb-r-8m1pbZ_j5E"
-        shell: bash
-      - name: Chat notification for success
-        if: ${{ success() }}
-        run: |
-          message="success"
+      #     payload=$(jq -n --arg msg "$message" '{ text: $msg }')
+      #     curl -X POST -H "Content-Type: text/plain" --data "$payload" "https://chat.googleapis.com/v1/spaces/AAAA_pSsBgQ/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=9YXYNNZ6P56uIiO4tUnGIs00Yo4Hbb-r-8m1pbZ_j5E"
+      #   shell: bash
+      # - name: Chat notification for success
+      #   if: ${{ success() }}
+      #   run: |
+      #     message="success"
   
-          payload=$(jq -n --arg msg "$message" '{ text: $msg }')
-          curl -X POST -H "Content-Type: text/plain" --data "$payload" "https://chat.googleapis.com/v1/spaces/AAAA_pSsBgQ/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=9YXYNNZ6P56uIiO4tUnGIs00Yo4Hbb-r-8m1pbZ_j5E"
-        shell: bash
-      - name: teststep
-        shell: bash
-        run: |
-          echo "mytest"
+      #     payload=$(jq -n --arg msg "$message" '{ text: $msg }')
+      #     curl -X POST -H "Content-Type: text/plain" --data "$payload" "https://chat.googleapis.com/v1/spaces/AAAA_pSsBgQ/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=9YXYNNZ6P56uIiO4tUnGIs00Yo4Hbb-r-8m1pbZ_j5E"
+      #   shell: bash
+      # - name: teststep
+      #   shell: bash
+      #   run: |
+      #     echo "mytest"
     
     
         
