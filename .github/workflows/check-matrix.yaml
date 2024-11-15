@@ -30,8 +30,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: test
+        working-directory: .
         run: |
           sed -i "s#test=VAL#test=MYNEWVAR#" gteam_env.properties
+          cat ./gteam_env.properties
         shell: bash        
         
       # - name: Chat notification for errors
