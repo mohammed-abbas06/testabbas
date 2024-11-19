@@ -25,7 +25,7 @@ jobs:
         shell: bash
 
   setup-environment:
-    needs: ${{ needs.approval.outputs.env_value == 'stage' && 'approval' || null }}
+    needs: approval
     runs-on: ubuntu-latest
     steps:
       - name: Setup environment
