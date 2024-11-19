@@ -1,0 +1,40 @@
+name: Approval Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment_name:
+        description: "Target environment"
+        required: true
+        default: "int"
+
+jobs:
+  approval:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Environment
+        id: check-env
+        run: echo "env=${{ github.event.inputs.environment_name }}" >> $GITHUB_ENV
+
+      - name: Approval Step
+        if: ${{ github.event.inputs.environment_name == 'stage' }}
+        environment:
+          name: approval-stage
+        run: echo "Approval required for stage environment."
+
+  trigger-build-and-deploy:
+    needs: approval
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Build and Deploy Workflow
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const environment = '${{ github.event.inputs.environment_name }}';
+            github.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'build-and-deploy.yml',
+              ref: context.ref,
+              inputs: { environment_name: environment },
+            });
