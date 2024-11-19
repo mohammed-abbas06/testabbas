@@ -9,34 +9,41 @@ on:
         default: "dev"
 
 jobs:
-  approval:
-    if: ${{ github.event.inputs.environment_name == 'stage' }}
+
+  decide-approval:
     runs-on: ubuntu-latest
     outputs:
-      env_value: ${{ steps.set_env.outputs.github_env }}
-      
+      github_env: ${{ steps.decide-approval.outputs.github_env }}
     steps:
-      - name: Approval step
-        id: set_env
-        run: |
-          echo "Approval required for stage environment."
-          github_env=${{ github.event.inputs.environment_name }}
-          echo "github_env=$github_env" >> $GITHUB_OUTPUT
+      - name: Checkout code
+        uses: actions/checkout@v4
+    
+      - name: Decide Approval based on environment
         shell: bash
+        id: decide-approval
+        run: |
+          if "${{ github.event.inputs.environment_name }} == "stage" ; then 
+            github_env="stage-approval-build-deploy" >> $GITHUB_OUTPUT
+          else
+            github_env=${{ github.event.inputs.environment_name }}
+          fi
 
-  setup-environment:
-    needs: approval
-    if:  ${{ (github.event.inputs.environment_name != 'stage') && always() }}
+  approval:
+    needs: decide-approval
+    permissions:
+        id-token: write
+        contents: write
+        checks: write
+    environment: ${{ needs.decide-approval.outputs.github_env }}
     runs-on: ubuntu-latest
     steps:
-      - name: Setup environment
-        run: |
-          echo "Setting up environment: ${{ github.event.inputs.environment_name }}"
-
+      - name: Approval status
         shell: bash
+        run: |
+          echo "Change has been approved for stage monolith Deployment"
         
   deploy:
-    needs: setup-environment
+    needs: approval
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to environment
