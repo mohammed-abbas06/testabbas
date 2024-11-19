@@ -26,7 +26,7 @@ jobs:
 
   setup-environment:
     needs: approval
-    if: ${{ github.event.inputs.environment_name == 'stage' }}
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Setup environment
