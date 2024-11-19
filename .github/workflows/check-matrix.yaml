@@ -47,7 +47,7 @@ jobs:
       - name: Chat notification for success
         if: ${{ success() }}
         run: |
-          message="🚧 *Build Started* 🚧\nThe build has started on branch `'${GITHUB_REF#refs/heads/}'`. \n\n*Commit:* `'$GITHUB_SHA'` \n*Triggered by:* <'$GITHUB_ACTOR'>
+          message="🚧 *Build Started* 🚧\nThe build has started on branch `'${GITHUB_REF#refs/heads/}'`. \n\n*Commit:* `'$GITHUB_SHA'` \n*Triggered by:* <'$GITHUB_ACTOR'>"
   
           payload=$(jq -n --arg msg "$message" '{ text: $msg }')
           curl -X POST -H "Content-Type: text/plain" --data "$payload" "https://chat.googleapis.com/v1/spaces/AAAA_pSsBgQ/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=9YXYNNZ6P56uIiO4tUnGIs00Yo4Hbb-r-8m1pbZ_j5E"
