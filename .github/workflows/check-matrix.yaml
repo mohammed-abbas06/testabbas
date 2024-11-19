@@ -49,13 +49,13 @@ jobs:
         run: |
           run_link="https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           payload=$(jq -n \
-            --arg message "🚧 *Build Started* 🚧\nThe build has started on branch"
+            --arg message "🚧 *Build Started* 🚧\nThe build has started on branch" \
             --arg branch "$GITHUB_REF" \
             --arg commit "$GITHUB_SHA" \
             --arg actor "$GITHUB_ACTOR" \
             --arg link "$run_link" \
             '{
-              text: "`\($message) `\($branch)`.\n\n*Commit:* `\($commit)`\n*Triggered by:* \($actor)\n*Run Link:* <\($link)>"
+              text: "\($message) `\($branch)`.\n\n*Commit:* `\($commit)`\n*Triggered by:* \($actor)\n*Run Link:* <\($link)>"
             }')
           
           curl -X POST -H "Content-Type: application/json" --data "$payload" "https://chat.googleapis.com/v1/spaces/AAAA_pSsBgQ/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=9YXYNNZ6P56uIiO4tUnGIs00Yo4Hbb-r-8m1pbZ_j5E"
