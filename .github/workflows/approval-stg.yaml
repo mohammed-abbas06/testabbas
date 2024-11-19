@@ -1,4 +1,4 @@
-name: Conditional Approval Workflow
+name: Simple 3 Jobs Workflow
 
 on:
   workflow_dispatch:
@@ -11,49 +11,28 @@ on:
 jobs:
   approval:
     if: ${{ github.event.inputs.environment_name == 'stage' }}
-    permissions:
-      id-token: write
-      contents: write
-      checks: write
-    environment: approval-build-deploy
     runs-on: ubuntu-latest
     steps:
       - name: Approval step
         run: |
-          echo "Approval is required for the stage environment."
+          echo "Approval required for stage environment."
         shell: bash
-        
-  assign-pods:
+  setup-environment:
     needs: ${{ github.event.inputs.environment_name == 'stage' && 'approval' || null }}
     runs-on: ubuntu-latest
     steps:
-      - name: Print environment
+      - name: Setup environment
         run: |
-          echo "Environment: ${{ github.event.inputs.environment_name }}"
+          echo "Setting up environment: ${{ github.event.inputs.environment_name }}"
+
         shell: bash
         
-      - name: Define pods
-        id: get_pods
-        run: |
-          if [[ "${{ github.event.inputs.environment_name }}" == "stage" ]]; then
-            echo "Pods for stage: ['us1', 'eu1']"
-            echo "::set-output name=pods::[\"us1\",\"eu1\"]"
-          else
-            echo "Pods for dev/qa: ['dev1']"
-            echo "::set-output name=pods::[\"dev1\"]"
-        shell: bash
-    outputs:
-      pods: ${{ steps.get_pods.outputs.pods }}
-
-  tc-build:
-    needs: assign-pods
-    strategy:
-      matrix:
-        region: ${{ fromJSON(needs.assign-pods.outputs.pods) }}
-    environment: ${{ github.event.inputs.environment_name }}-${{ matrix.region }}
+  deploy:
+    needs: setup-environment
     runs-on: ubuntu-latest
     steps:
-      - name: Print deployment region
+      - name: Deploy to environment
         run: |
-          echo "Deploying to region: ${{ matrix.region }}"
+          echo "Deploying to ${{ github.event.inputs.environment_name }}"
+  
         shell: bash
