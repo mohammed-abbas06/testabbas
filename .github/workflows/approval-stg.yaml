@@ -19,15 +19,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Approval step
-        run: echo "Approval is required for the stage environment."
-
+        run: |
+          echo "Approval is required for the stage environment."
+        shell: bash
+        
   assign-pods:
     needs: ${{ github.event.inputs.environment_name == 'stage' && 'approval' || null }}
     runs-on: ubuntu-latest
     steps:
       - name: Print environment
-        run: echo "Environment: ${{ github.event.inputs.environment_name }}"
-
+        run: |
+          echo "Environment: ${{ github.event.inputs.environment_name }}"
+        shell: bash
+        
       - name: Define pods
         id: get_pods
         run: |
@@ -37,7 +41,7 @@ jobs:
           else
             echo "Pods for dev/qa: ['dev1']"
             echo "::set-output name=pods::[\"dev1\"]"
-
+        shell: bash
     outputs:
       pods: ${{ steps.get_pods.outputs.pods }}
 
@@ -50,4 +54,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print deployment region
-        run: echo "Deploying to region: ${{ matrix.region }}"
+        run: |
+          echo "Deploying to region: ${{ matrix.region }}"
+        shell: bash
