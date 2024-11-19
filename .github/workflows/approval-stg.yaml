@@ -12,13 +12,20 @@ jobs:
   approval:
     if: ${{ github.event.inputs.environment_name == 'stage' }}
     runs-on: ubuntu-latest
+    outputs:
+      env_value: ${{ steps.set_env.outputs.github_env }}
+      
     steps:
       - name: Approval step
+        id: set_env
         run: |
           echo "Approval required for stage environment."
+          github_env=${{ github.event.inputs.environment_name }}
+          echo "github_env=$github_env" >> $GITHUB_OUTPUT
         shell: bash
+
   setup-environment:
-    needs: ${{ github.event.inputs.environment_name == 'stage' && 'approval' || null }}
+    needs: ${{ needs.approval.outputs.env_value == 'stage' && 'approval' || null }}
     runs-on: ubuntu-latest
     steps:
       - name: Setup environment
