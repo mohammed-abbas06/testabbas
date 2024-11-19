@@ -22,7 +22,7 @@ jobs:
         shell: bash
         id: decide-approval
         run: |
-          if "${{ github.event.inputs.environment_name }} == "stage" ; then 
+          if "${{ github.event.inputs.environment_name  == "stage"}} ; then 
             github_env="stage-approval-build-deploy" >> $GITHUB_OUTPUT
           else
             github_env=${{ github.event.inputs.environment_name }}
