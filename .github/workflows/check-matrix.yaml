@@ -19,7 +19,7 @@ jobs:
 
       - name: Get Pods
         id: get_pods
-        uses: ./.github/actions/define-pod
+        uses: ./.github/actions/checks_permission
         with:
           environment: prod
     outputs:
