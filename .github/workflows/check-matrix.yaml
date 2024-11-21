@@ -35,7 +35,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Awaiting Approval for ${{ matrix.pod }}
-        run: echo "Approval required for pod: ${{ matrix.pod }}"
+        run: |
+          echo "Approval required for pod: ${{ matrix.pod }}"
 
   # Step 3: Deploy Each Pod
   deploy-pods:
@@ -46,4 +47,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploying ${{ matrix.pod }}
-        run: echo "Deploying pod: ${{ matrix.pod }}"
+        run: |
+          echo "Deploying pod: ${{ matrix.pod }}"
