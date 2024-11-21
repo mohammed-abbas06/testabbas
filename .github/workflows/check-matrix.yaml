@@ -37,14 +37,19 @@ jobs:
       - name: Deploying ${{ matrix.pod }}
         run: |
           echo "Deploying pod: ${{ matrix.pod }}"
+      - name: Capture Approval
+        id: capture_approval
+        run: |
+          echo "Approved pod: ${{ matrix.region }}"
+          echo 'pod=${{ matrix.region }}' >> "$GITHUB_OUTPUT"
+
+    outputs:
+      pods: ${{ steps.capture_approval.outputs.pod }}
     
   deploy-notification:
-    needs: [deploy-pods,assign-pods]
-    strategy:
-      matrix:
-          pod: ${{ fromJSON(needs.assign-pods.outputs.pods) }}
+    needs: deploy-pods
     runs-on: ubuntu-latest
     steps:
-      - name: Deploying ${{ matrix.pod }}
+      - name: Deploying ${{ needs.deploy-pods.outputs.pods }}
         run: |
-          echo "Deploying pod: ${{ matrix.pod }}"
+          echo "Deploying pod: ${{ needs.deploy-pods.outputs.pods }}"
