@@ -40,7 +40,7 @@ jobs:
 
   # Step 3: Deploy Each Pod
   deploy-pods:
-    needs: pod-approval
+    needs: [pod-approval, assign-pods]
     strategy:
       matrix:
         pod: ${{ matrix.pod }}
