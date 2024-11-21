@@ -1,70 +1,78 @@
-name: Test Pod Deployment with Approvals
+name: "Prod Build and Deploy"
 
 on:
   workflow_dispatch:
-    inputs:
-      pods:
-        description: "List of pods (comma-separated)"
-        required: true
-        default: "pod1,pod2,pod3"
+
+permissions:
+  id-token: write
+  contents: write
 
 jobs:
-  # Step 1: Parse Pods
   assign-pods:
     runs-on: ubuntu-latest
     steps:
-
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Get Pods
         id: get_pods
-        uses: ./.github/actions/checks_permission
-        with:
-          environment: prod
-    outputs:
-      pods: ${{ steps.get_pods.outputs.pod }}
+        run: |
+          echo "::set-output name=pod::[\"us1\",\"ap1\"]"
 
-  # Step 3: Deploy Each Pod
+    outputs:
+      pod: ${{ steps.get_pods.outputs.pod }}
+
   approval:
     needs: assign-pods
+    permissions:
+      id-token: write
+      contents: write
+      checks: write
     strategy:
       matrix:
         region: ${{ fromJSON(needs.assign-pods.outputs.pod) }}
     environment: approval-${{ matrix.region }}
     runs-on: ubuntu-latest
     steps:
-      - name: Deploying ${{ matrix.pod }}
+      - name: Approval status
+        id: approval_status
+        shell: bash
         run: |
-          echo "Deploying pod: ${{ matrix.pod }}"
-      - name: Capture Approval
-        id: capture_approval
-        run: |
-          echo "Approved pod: us1"
-          echo 'pod=us1' >> "$GITHUB_OUTPUT"
+          echo "Change has been approved for prod ${{ matrix.region }} monolith Deployment"
+          echo "::set-output name=approved::${{ matrix.region }}"
 
     outputs:
-      pods: ${{ steps.capture_approval.outputs.pod }}
+      approved: ${{ steps.approval_status.outputs.approved }}
 
-  # deploy-pods-ap1:
-  #   needs: assign-pods
-  #   environment: approval-ap1
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Capture Approval
-  #       id: capture_approval
-  #       run: |
-  #         echo "Approved pod: ap1"
-  #         echo 'pod=ap1' >> "$GITHUB_OUTPUT"
-
-  #   outputs:
-  #     pods: ${{ steps.capture_approval.outputs.pod }}
-    
-  deploy-notification:
+  build:
     needs: approval
     runs-on: ubuntu-latest
     if: ${{ needs.approval.outputs.approved }}
+    strategy:
+      matrix:
+        region: ${{ fromJSON(needs.approval.outputs.approved) }}
+    environment: prod-${{ matrix.region }}
     steps:
-      - name: Deploying ${{ needs.approval.outputs.pods }}
-        run: |
-          echo "Deploying pod: ${{ needs.approval.outputs.pods }}"
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: notify-chat-build-started
+        run: echo "Build started for prod-${{ matrix.region }}"
+
+      - name: Build with Gradle
+        run: echo "Building for prod-${{ matrix.region }}"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ needs.build.outputs.approved }}
+    strategy:
+      matrix:
+        region: ${{ fromJSON(needs.build.outputs.approved) }}
+    environment: prod-${{ matrix.region }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Deploy App
+        run: echo "Deploying for prod-${{ matrix.region }}"
