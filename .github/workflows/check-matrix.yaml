@@ -26,9 +26,12 @@ jobs:
       pods: ${{ steps.get_pods.outputs.pod }}
 
   # Step 3: Deploy Each Pod
-  deploy-pods-us1:
+  approval:
     needs: assign-pods
-    environment: approval-us1
+    strategy:
+      matrix:
+        region: ${{ fromJSON(needs.assign-pods.outputs.pod) }}
+    environment: approval-${{ matrix.region }}
     runs-on: ubuntu-latest
     steps:
       - name: Deploying ${{ matrix.pod }}
@@ -43,23 +46,25 @@ jobs:
     outputs:
       pods: ${{ steps.capture_approval.outputs.pod }}
 
-  deploy-pods-ap1:
-    needs: assign-pods
-    environment: approval-ap1
-    runs-on: ubuntu-latest
-    steps:
-      - name: Capture Approval
-        id: capture_approval
-        run: |
-          echo "Approved pod: ap1"
-          echo 'pod=ap1' >> "$GITHUB_OUTPUT"
+  # deploy-pods-ap1:
+  #   needs: assign-pods
+  #   environment: approval-ap1
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Capture Approval
+  #       id: capture_approval
+  #       run: |
+  #         echo "Approved pod: ap1"
+  #         echo 'pod=ap1' >> "$GITHUB_OUTPUT"
 
-    outputs:
-      pods: ${{ steps.capture_approval.outputs.pod }}
+  #   outputs:
+  #     pods: ${{ steps.capture_approval.outputs.pod }}
     
   deploy-notification:
+    needs: approval
     runs-on: ubuntu-latest
+    if: ${{ needs.approval.outputs.approved }}
     steps:
-      - name: Deploying ${{ needs.deploy-pods.outputs.pods }}
+      - name: Deploying ${{ needs.approval.outputs.pods }}
         run: |
-          echo "Deploying pod: ${{ needs.deploy-pods.outputs.pods }}"
+          echo "Deploying pod: ${{ needs.approval.outputs.pods }}"
