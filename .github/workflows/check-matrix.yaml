@@ -41,11 +41,11 @@ jobs:
   deploy-notification:
     needs: [deploy-pods,assign-pods]
     strategy:
-    matrix:
-        pod: ${{ fromJSON(needs.assign-pods.outputs.pods) }}
-    environment: approval-${{ matrix.pod }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploying ${{ matrix.pod }}
-        run: |
-          echo "Deploying pod: ${{ matrix.pod }}"
+      matrix:
+          pod: ${{ fromJSON(needs.assign-pods.outputs.pods) }}
+      environment: approval-${{ matrix.pod }}
+      runs-on: ubuntu-latest
+      steps:
+        - name: Deploying ${{ matrix.pod }}
+          run: |
+            echo "Deploying pod: ${{ matrix.pod }}"
