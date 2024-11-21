@@ -46,8 +46,8 @@ runs:
           qa)
             echo 'pods=["us1", "eu1"]' >> "$GITHUB_OUTPUT"
             ;;
-          stage)
-            echo 'pods=["us1", "ap1", "ap2"]' >> "$GITHUB_OUTPUT"
+          prod)
+            echo 'pods=["us1","ap1","ap2","eu1"]' >> "$GITHUB_OUTPUT"
             ;;
           *)
             echo "Environment not recognized."
