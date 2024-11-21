@@ -43,7 +43,7 @@ jobs:
     needs: [pod-approval, assign-pods]
     strategy:
       matrix:
-        pod: ${{ matrix.pod }}
+        pod: ${{ fromJSON(needs.assign-pods.outputs.pods) }}
     runs-on: ubuntu-latest
     steps:
       - name: Deploying ${{ matrix.pod }}
