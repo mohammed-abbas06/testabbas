@@ -1,102 +1,49 @@
-name: "Build and Deploy"
-run-name: ${{ github.actor }} has triggered gradle build to ${{ github.event.inputs.environment_name }}
-
+name: Test Pod Deployment with Approvals
 
 on:
   workflow_dispatch:
     inputs:
-      environment_name:
-        description: 'enter the environment'
-        type: choice
-        options:
-          - int
-          - qa
-          - stage
+      pods:
+        description: "List of pods (comma-separated)"
         required: true
-
-permissions:
-  id-token: write
-  contents: write
-
-# Concurrency settings to prevent multiple runs
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
+        default: "pod1,pod2,pod3"
 
 jobs:
-  test:
+  # Step 1: Parse Pods
+  assign-pods:
     runs-on: ubuntu-latest
     steps:
+
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: test
-        working-directory: .
-        run: |
-          sed -i "s#test=VAL#test=MYNEWVAR#" gteam_env.properties
-          cat ./gteam_env.properties
-        shell: bash        
-        
-      - name: Chat notification for errors
-        if: ${{ failure() }}
-        run: |
-          message="failed"
-  
-          payload=$(jq -n --arg msg "$message" '{ text: $msg }')
-          curl -X POST -H "Content-Type: text/plain" --data "$payload" "https://chat.googleapis.com/v1/spaces/AAAA_pSsBgQ/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=9YXYNNZ6P56uIiO4tUnGIs00Yo4Hbb-r-8m1pbZ_j5E"
-        shell: bash
-      - name: Chat notification for success
-        if: ${{ success() }}
-        run: |
-          payload=$(jq -n \
-            --arg message "🚧 *Build Started* 🚧" \
-            --arg branch "The build has started on branch \`$GITHUB_REF\`." \
-            --arg commit "*Commit:* \`$GITHUB_SHA\`" \
-            --arg actor "*Triggered by:* $GITHUB_ACTOR" \
-            --arg link "*Run Link:* <$run_link>" \
-            '{
-              text: "\($message)\n\($branch)\n\n\($commit)\n\($actor)\n\($link)"
-            }')
-          
-          curl -X POST -H "Content-Type: application/json" --data "$payload" "https://chat.googleapis.com/v1/spaces/AAAA_pSsBgQ/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=9YXYNNZ6P56uIiO4tUnGIs00Yo4Hbb-r-8m1pbZ_j5E"
-        shell: bash
-      - name: teststep
-        shell: bash
-        run: |
-          echo "mytest"
-    
-    
-        
 
-  # define-matrix:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
-        
-  #     - name: Get Pods
-  #       id: get_pods
-  #       uses: ./.github/actions/checks_permission
-  #       with:
-  #         environment: ${{ github.event.inputs.environment_name }}
-          
-  #   outputs:
-  #     pod: ${{ steps.get_pods.outputs.pod }}
-          
-  # define-pod:
-  #   runs-on: ubuntu-latest
-  #   needs: define-matrix
-  #   strategy:
-  #     matrix:
-  #       region: ${{ fromJSON(needs.define-matrix.outputs.pod) }}
-  #   environment: int-${{ matrix.region }}   # Pass the region directly here
-  #   steps:
-  #     - name: test
-  #       run: |
-  #         echo ${{ vars.region}}
-  #       shell: bash
-        
-         
-    
-        
-        
-  
+      - name: Get Pods
+        id: get_pods
+        uses: ./.github/actions/define-pod
+        with:
+          environment: prod
+    outputs:
+      pods: ${{ steps.get_pods.outputs.pod }}
+
+  # Step 2: Approval for Each Pod
+  pod-approval:
+    needs: assign-pods
+    strategy:
+      matrix:
+        pod: ${{ fromJSON(needs.assign-pods.outputs.pods) }}
+    environment: approval-${{ matrix.pod }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Awaiting Approval for ${{ matrix.pod }}
+        run: echo "Approval required for pod: ${{ matrix.pod }}"
+
+  # Step 3: Deploy Each Pod
+  deploy-pods:
+    needs: pod-approval
+    strategy:
+      matrix:
+        pod: ${{ matrix.pod }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploying ${{ matrix.pod }}
+        run: echo "Deploying pod: ${{ matrix.pod }}"
