@@ -25,8 +25,8 @@ jobs:
     outputs:
       pods: ${{ steps.get_pods.outputs.pod }}
 
-  # Step 2: Approval for Each Pod
-  pod-approval:
+  # Step 3: Deploy Each Pod
+  deploy-pods:
     needs: assign-pods
     strategy:
       matrix:
@@ -34,16 +34,16 @@ jobs:
     environment: approval-${{ matrix.pod }}
     runs-on: ubuntu-latest
     steps:
-      - name: Awaiting Approval for ${{ matrix.pod }}
+      - name: Deploying ${{ matrix.pod }}
         run: |
-          echo "Approval required for pod: ${{ matrix.pod }}"
-
-  # Step 3: Deploy Each Pod
-  deploy-pods:
-    needs: [pod-approval, assign-pods]
+          echo "Deploying pod: ${{ matrix.pod }}"
+    
+  deploy-notification:
+    needs: [deploy-pods,assign-pods]
     strategy:
-      matrix:
+    matrix:
         pod: ${{ fromJSON(needs.assign-pods.outputs.pods) }}
+    environment: approval-${{ matrix.pod }}
     runs-on: ubuntu-latest
     steps:
       - name: Deploying ${{ matrix.pod }}
