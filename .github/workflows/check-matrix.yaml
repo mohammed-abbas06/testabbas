@@ -58,7 +58,6 @@ jobs:
       pods: ${{ steps.capture_approval.outputs.pod }}
     
   deploy-notification:
-    needs: [deploy-pods-us1,deploy-pods-ap1]
     runs-on: ubuntu-latest
     steps:
       - name: Deploying ${{ needs.deploy-pods.outputs.pods }}
