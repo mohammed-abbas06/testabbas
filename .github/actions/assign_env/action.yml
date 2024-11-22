@@ -18,7 +18,7 @@ runs:
     - name: Replace environment in backend.tf key
       shell: bash
       run: |
-          sed -i "s#bucket    = \"iac-remote-state-tf\"#bucket    = \"${{ inputs.terraform_state_bucket }}\"#" backend.tf gteam_env.properties
+          sed -i "s#bucket    = \"iac-remote-state-tf\"#bucket    = \"${{ inputs.terraform_state_bucket }}\"#" gteam_env.properties
           sed -i "s#key    = \"codedeploy_infra/int-us1.tfstate\"#key    = \"codedeploy_infra/${{ inputs.environment }}.tfstate\"#" gteam_env.properties
           sed -i "s#region  = \"us-east-1\"#region  = \"${{ inputs.terraform_state_region }}\"#" gteam_env.properties
           cat gteam_env.properties
