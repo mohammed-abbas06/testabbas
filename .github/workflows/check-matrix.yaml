@@ -19,4 +19,4 @@ jobs:
         with:
           environment: prod-us1
           terraform_state_bucket: my-bucket
-          terraform_state_region: us-east-1
+          terraform_state_region: us-east-2
