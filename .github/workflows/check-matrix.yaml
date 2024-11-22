@@ -14,65 +14,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Get Pods
-        id: get_pods
-        run: |
-          echo "::set-output name=pod::[\"us1\",\"ap1\"]"
-
-    outputs:
-      pod: ${{ steps.get_pods.outputs.pod }}
-
-  approval:
-    needs: assign-pods
-    permissions:
-      id-token: write
-      contents: write
-      checks: write
-    strategy:
-      matrix:
-        region: ${{ fromJSON(needs.assign-pods.outputs.pod) }}
-    environment: approval-${{ matrix.region }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Approval status
-        id: approval_status
-        shell: bash
-        run: |
-          echo "Change has been approved for prod ${{ matrix.region }} monolith Deployment"
-          echo "::set-output name=approved::${{ matrix.region }}"
-
-    outputs:
-      approved: ${{ steps.approval_status.outputs.approved }}
-
-  build:
-    needs: approval
-    runs-on: ubuntu-latest
-    if: ${{ needs.approval.outputs.approved }}
-    strategy:
-      matrix:
-        region: ${{ fromJSON(needs.approval.outputs.approved) }}
-    environment: prod-${{ matrix.region }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: notify-chat-build-started
-        run: echo "Build started for prod-${{ matrix.region }}"
-
-      - name: Build with Gradle
-        run: echo "Building for prod-${{ matrix.region }}"
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    if: ${{ needs.build.outputs.approved }}
-    strategy:
-      matrix:
-        region: ${{ fromJSON(needs.build.outputs.approved) }}
-    environment: prod-${{ matrix.region }}
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Deploy App
-        run: echo "Deploying for prod-${{ matrix.region }}"
+    - name: Replace environment in backend.tf key
+      shell: bash
+      run: |
+          sed -i "s#bucket    = \"iac-remote-state-tf\"#bucket    = \"my-bucket\"#" gteam_env.properties
+          sed -i "s#key    = \"codedeploy_infra/int-us1.tfstate\"#key    = \"codedeploy_infra/${{ inputs.environment }}.tfstate\"#" gteam_env.properties
+          sed -i "s#region    = \"us-east-1\"#region    = \"${{ inputs.terraform_state_region }}\"#" gteam_env.properties
+          cat gteam_env.properties
+      working-directory: .
