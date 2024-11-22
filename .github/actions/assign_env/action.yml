@@ -1,29 +1,24 @@
 name: "Set Version from Branch Name"
 description: "Sets the version based on the branch name, or defaults to 0.0.run_number"
 inputs:
-  ref_name:
+  terraform_state_bucket:
     description: "The branch name or tag reference"
     required: true
-  run_number:
+  environment:
     description: "The GitHub run number"
     required: true
+  terraform_state_region:
+    required: true
 
-outputs:
-  version:
-    description: "The version string extracted from the branch name or generated based on the run number"
-    value: ${{ steps.set_version.outputs.VERSION }}
+
 
 runs:
   using: "composite"
   steps:
-    - name: Set Version
-      id: set_version
+    - name: Replace environment in backend.tf key
       shell: bash
       run: |
-        if echo "${{ inputs.ref_name }}" | grep -Eiq '^release/[Rr][0-9]+\.[0-9]+\.[0-9]+$'; then
-          VERSION=$(echo "${{ inputs.ref_name }}" | sed -E 's/^release\/[Rr]([0-9]+\.[0-9]+\.[0-9]+)$/\1/')
-          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-        else
-          VERSION="0.0.${{ inputs.run_number }}"
-          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-        fi
+          sed -i "s#bucket    = \"iac-remote-state-tf\"#bucket    = \"${{ inputs.terraform_state_bucket }}\"#" gteam_env.properties
+          sed -i "s#key    = \"codedeploy_infra/int-us1.tfstate\"#key    = \"codedeploy_infra/${{ inputs.environment }}.tfstate\"#" gteam_env.properties
+          sed -i "s#region    = \"us-east-1\"#region    = \"${{ inputs.terraform_state_region }}\"#" gteam_env.properties
+      working-directory: .
