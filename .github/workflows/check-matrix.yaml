@@ -10,6 +10,7 @@ permissions:
 jobs:
   assign-pods:
     runs-on: ubuntu-latest
+    environment: approval-us1
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
