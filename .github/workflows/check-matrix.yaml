@@ -1,6 +1,7 @@
 name: "Prod Build and Deploy"
 
 on:
+  workflow_call:
   workflow_dispatch:
 
 permissions:
