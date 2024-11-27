@@ -21,8 +21,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Trigger check-matrix workflow
-        uses: ./.github/workflows/check-matrix.yaml
+
+  build-deploy:
+    uses: ./.github/workflows/check-matrix.yaml
 
       # - name: Trigger check-matrix workflow
       #   run: |
