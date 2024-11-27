@@ -27,4 +27,11 @@ jobs:
           gh workflow run check-matrix.yaml --ref main
         env:
           GH_TOKEN: ${{ secrets.BOT_PAT }}
-        
+
+  tag-dep:
+    runs-on: ubuntu-latest
+    needs: tag
+    steps:
+      - name: check if this step works
+      run: |
+        echo "test"
