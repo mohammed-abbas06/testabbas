@@ -21,12 +21,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Trigger check-matrix workflow
+        uses: ./.github/workflows/check-matrix.yaml
 
       # - name: Trigger check-matrix workflow
       #   run: |
       #     gh workflow run check-matrix.yaml --ref main
       #   env:
       #     GH_TOKEN: ${{ secrets.BOT_PAT }}
-      - name: Trigger check-matrix workflow
-        uses: ./.github/workflows/check-matrix.yaml
+
 
