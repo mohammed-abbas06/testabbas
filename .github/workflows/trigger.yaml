@@ -1,0 +1,36 @@
+name: Tag version
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  VERSION: 3.0.${{ github.run_number }}
+
+concurrency:
+  group: pre-prod
+
+permissions:
+  id-token: write
+  contents: write
+  checks: write
+
+jobs:
+      
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Trigger stage build deploy
+        uses: actions/github-script@0.9.0
+        with:
+          github-token: ${{ secrets.BOT_PAT }}
+          script: |
+            const response = await github.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_file: '.github/workflows/check-matrix.yaml',
+              ref: 'main'
+            });
+            console.log(response);
