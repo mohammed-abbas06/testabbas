@@ -6,8 +6,8 @@ on:
 env:
   VERSION: 3.0.${{ github.run_number }}
 
-concurrency:
-  group: pre-prod
+# concurrency:
+#   group: pre-prod
 
 permissions:
   id-token: write
