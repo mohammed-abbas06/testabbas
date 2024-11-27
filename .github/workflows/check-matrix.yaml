@@ -2,10 +2,10 @@ name: "Prod Build and Deploy"
 
 on:
   workflow_call:
-  inputs: 
-    version:
-    required: true
-    type: string  
+    inputs: 
+      version:
+      required: true
+      type: string  
   workflow_dispatch:
 
 permissions:
