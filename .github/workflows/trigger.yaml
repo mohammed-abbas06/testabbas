@@ -17,11 +17,6 @@ permissions:
 
 jobs:
       
-  tag:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
   build-deploy:
     uses: ./.github/workflows/check-matrix.yaml
 
