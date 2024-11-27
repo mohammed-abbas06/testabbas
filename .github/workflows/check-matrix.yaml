@@ -36,8 +36,7 @@ jobs:
           echo ${{ env.VERSION }}
       - name: github run link
         run: |
-          run_link="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          echo "$run_link"
+          echo "${{ secrets.mysecret }}"
         # uses: ./.github/actions/assign_env
         # with:
         #   environment: prod-us1
