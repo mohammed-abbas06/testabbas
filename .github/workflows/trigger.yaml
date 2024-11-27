@@ -17,10 +17,17 @@ permissions:
 
 jobs:
 
+
   build-deploy:
-    uses: ./.github/workflows/check-matrix.yaml
-    with:
-      version: ${{ env.VERSION }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: deploy stage 
+        uses: ./.github/workflows/check-matrix.yaml
+        with:
+          version: ${{ env.VERSION }}
 
   tag-myjob:
     runs-on: ubuntu-latest
