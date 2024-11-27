@@ -26,13 +26,13 @@ jobs:
   build-deploy:
       uses: ./.github/workflows/check-matrix.yaml
       with:
-        version: ${{ env.VERSION }}
+        version: 3.0.${{ github.run_number }}
 
   tag-myjob:
     runs-on: ubuntu-latest
     needs: build-deploy
     steps:
       - uses: actions/checkout@v4
-      - name: Trigger check-matrix workflow
+      - name: check tag version matches
         run: |
-          echo "success"
+          echo "3.0.${{ github.run_number }}"
