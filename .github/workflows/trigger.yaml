@@ -17,6 +17,12 @@ permissions:
 
 jobs:
 
+  print-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print version
+        run: echo ${{ env.VERSION }}
+        
   build-deploy:
       uses: ./.github/workflows/check-matrix.yaml
       with:
