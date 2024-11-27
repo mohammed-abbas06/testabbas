@@ -22,16 +22,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # - name: Trigger check-matrix workflow
+      #   run: |
+      #     gh workflow run check-matrix.yaml --ref main
+      #   env:
+      #     GH_TOKEN: ${{ secrets.BOT_PAT }}
       - name: Trigger check-matrix workflow
-        run: |
-          gh workflow run check-matrix.yaml --ref main
-        env:
-          GH_TOKEN: ${{ secrets.BOT_PAT }}
+        uses: ./.github/workflows/check-matrix.yaml
 
-  tag-dep:
-    runs-on: ubuntu-latest
-    needs: tag
-    steps:
-      - name: check if this step works
-      run: |
-        echo "test"
