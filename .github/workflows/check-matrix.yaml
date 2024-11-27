@@ -11,14 +11,17 @@ permissions:
 jobs:
   assign-pods:
     runs-on: ubuntu-latest
-    environment: approval-us1
+    strategy:
+      matrix:
+        pod: ["us1", "eu1", "ap1"]
+    environment: approval-${{ matrix.pod }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Replace environment in backend.tf key
         run: |
-          exit 1
+          echo "success"
         # uses: ./.github/actions/assign_env
         # with:
         #   environment: prod-us1
