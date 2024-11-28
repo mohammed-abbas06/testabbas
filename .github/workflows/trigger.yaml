@@ -27,6 +27,7 @@ jobs:
       uses: ./.github/workflows/check-matrix.yaml
       with:
         version: 3.0.${{ github.run_number }}
+      secrets: inherit
 
   tag-myjob:
     runs-on: ubuntu-latest
