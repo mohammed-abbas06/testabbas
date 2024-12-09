@@ -10,7 +10,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
       - name: test job
-        uses: ./.github/actions/assign-env
+        uses: ./.github/actions/assign_env
         with:
           environment: dev
         
