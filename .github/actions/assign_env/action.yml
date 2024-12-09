@@ -1,14 +1,16 @@
 name: "Set Version from Branch Name"
 description: "Sets the version based on the branch name, or defaults to 0.0.run_number"
 inputs:
-  terraform_state_bucket:
-    description: "The branch name or tag reference"
-    required: true
+  # terraform_state_bucket:
+  #   description: "The branch name or tag reference"
+  #   required: true
+  # environment:
+  #   description: "The GitHub run number"
+  #   required: true
+  # terraform_state_region:
+  #   required: true
   environment:
     description: "The GitHub run number"
-    required: true
-  terraform_state_region:
-    required: true
 
 
 
@@ -20,9 +22,9 @@ runs:
       env:
         BUILD_NUMBER: ${{ github.run_number }}.${{ github.run_attempt }}
       run: |
-          sed -i "s#bucket = \"iac-remote-state-tf\"#bucket = \"${{ inputs.terraform_state_bucket }}\"#" gteam_env.properties
-          sed -i "s#key    = \"codedeploy_infra/int-us1.tfstate\"#key    = \"codedeploy_infra/${{ inputs.environment }}.tfstate\"#" gteam_env.properties
-          sed -i "s#region = \"us-east-1\"#region = \"${{ inputs.terraform_state_region }}\"#" gteam_env.properties
-          cat gteam_env.properties
+          # sed -i "s#bucket = \"iac-remote-state-tf\"#bucket = \"${{ inputs.terraform_state_bucket }}\"#" gteam_env.properties
+          # sed -i "s#key    = \"codedeploy_infra/int-us1.tfstate\"#key    = \"codedeploy_infra/${{ inputs.environment }}.tfstate\"#" gteam_env.properties
+          # sed -i "s#region = \"us-east-1\"#region = \"${{ inputs.terraform_state_region }}\"#" gteam_env.properties
+          # cat gteam_env.properties
           echo $BUILD_NUMBER
       working-directory: .
