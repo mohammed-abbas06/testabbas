@@ -1,0 +1,14 @@
+name: test version
+
+on:
+  push
+
+jobs:
+  test-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test job
+        uses: ./.github/actions/assign-env
+        with:
+          environment: dev
+        
