@@ -1,7 +1,6 @@
 import os
 import boto3
 
-client = boto3.client('autoscaling')
 
 # Read environment variables and convert them into lists
 application_name = os.getenv('APPLICATION_NAME').split(',')
