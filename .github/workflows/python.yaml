@@ -1,0 +1,31 @@
+name: Test Remove Scaling Policies
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test-remove-scaling-policies:
+    runs-on: ubuntu-latest
+
+    env:
+      APPLICATION_NAME: prod-us1-monolith-app,prod-us1-monolith-app-files,prod-us1-monolith-app-highio,prod-us1-monolith-app-objsync,prod-us1-monolith-app-view
+      DEPLOYMENT_GROUP_NAME: prod-us1-monolith-deploy-app,prod-us1-monolith-deploy-app-files,prod-us1-monolith-deploy-app-highio,prod-us1-monolith-deploy-app-objsync,prod-us1-monolith-deploy-app-view
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install boto3
+
+      - name: Remove Scaling Policies
+        shell: bash
+        working-directory: .
+        run: python remove_scaling_policies.py
